@@ -1,0 +1,169 @@
+{
+	templateId: atlas-search
+	templateRole: search
+	extends: ["base-intent"]
+	containedBy: ["top"]
+	model: Stream
+	label: Search/Home page for Atlas
+	description: Search Page for Atlas Content
+	schema: {
+		type:object
+		properties: {
+			icon: {type:"string"}
+			label: {type:"string"}
+			summary: {type:"string"}
+			data: {
+				type:object
+				properties: {
+					searchText: {type:"string"}
+					content: {type:"string"}
+				}
+			}
+		}    
+	}
+	states: {
+		default: {
+			label: "Default State",
+			description: "Search templates do not use any other states"
+		}
+	}
+	roles: {}
+
+	bundles: {
+		/*javascript: {
+			content-type:application/javascript
+		}
+		hyperscript: {
+			content-type:text/hyperscript
+		}*/
+	}
+
+	schema: {
+		type:object
+		properties: {
+			label: {type:"string"}
+			summary: {type:"string"}
+			data: {
+				type:object
+				properties: {
+					searchText: {type:"string"}
+					content: {type:"string"}
+				}
+			}
+		}    
+	}
+
+	tagPaths: ["data.tags"]
+
+	actions: {
+
+		create: {
+			roles:["owner"]
+			steps: [
+				{do: "set-data", defaults: {label: "New Page"}}
+				{
+					do:edit
+					form: {
+						type:layout-tabs
+						label:Create Search Page
+						children: [
+							{
+								type:layout-vertical
+								label:Page Info
+								children: [
+									{type:"text", label:"Token", path:"token"}
+									{type:"text", label:"Icon", path:"icon"}
+									{type:"text", label:"Page Name", path:"label"}
+									{type:"textarea", label:"Description", path:"summary"}
+								]
+							},
+							{
+								type:layout-vertical
+								label:Content
+								children:[
+									{type:"text", path:"data.searchText", label:"Search Text", description:"Prompt to display in the search box."}
+									{type:"textarea", path:"data.content", label:"Page Heading", description:"Appears at the top of search results.  Markdown is okay.", options:{rows:10}}
+								]
+							}
+						]
+					}
+				}
+				{do:"save"}
+				{do:"forward-to", url:"/{{.StreamID}}/edit"}
+			]
+		}
+		edit: {
+			roles: ["owner"]
+			steps: [
+				{do: "as-modal", background:"view", steps: [
+					{
+						do: edit
+						options: ["delete:/{{.StreamID}}/delete"]
+						form: {
+							type: layout-tabs
+							label:"Edit Search Page"
+							children: [
+								{
+									type:"layout-vertical",
+									label:"Page Info",
+									children: [
+										{type:"text", readOnly:true, label:"Template Type", path:"templateId"}
+										{type:"text", label:"Token", path:"token"}
+										{type:"text", label:"Icon", path:"icon"}
+										{type:"text", label:"Page Name", path:"label"}
+										{type:"textarea", label:"Description", path:"summary"}
+									]
+								},
+								{
+									type:"layout-vertical",
+									label:"Content",
+									children:[
+										{type:"text", path:"data.searchText", label:"Search Text", description:"Prompt to display in the search box."}
+										{type:"textarea", path:"data.content", label:"Page Heading", description:"Appears at the top of search results.  Markdown is okay.", options:{rows:10}}
+									]
+								}
+							]
+						}
+					}
+				]}
+				{do: "save-and-publish", state:"default", message:"Edited by {{.Author.DisplayName}}"}
+				{do: "refresh-page"}
+			]
+		}
+
+		delete: {
+			roles: ["owner"]
+			steps: [
+				{do:"delete", title:"Delete '{{.Label}}'?", message:"All content and comments will be lost.  There is NO UNDO."}
+				{do:"forward-to", url:"/{{.ParentID}}"}
+			]
+		}
+
+		view: {
+			roles: ["anonymous"]
+			steps:[
+				{do:"view-html"}
+			]
+		}
+
+		view-results: {
+			roles: ["anonymous"]
+			steps:[
+				{do:"view-html"}
+			]
+		}
+		view-suggestions: {
+			roles: ["anonymous"]
+			steps:[
+				{do:"view-html"}
+			]
+		}
+
+		feed: {
+			roles: ["anonymous"]
+			steps: [
+				{do:"view-feed", search-types:["Person"]}
+			]
+		}
+	}
+}

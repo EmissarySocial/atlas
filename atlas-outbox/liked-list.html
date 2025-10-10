@@ -1,0 +1,73 @@
+{{- $page := . -}}
+{{- $responses := .Responses.Top12.ByCreateDate.Reverse.Slice -}}
+{{- $isMyself := .IsMyself -}}
+
+{{- if ne 0 (len $responses) -}}
+	{{- $last := $responses.Last -}}
+
+	{{- range $responses -}}
+		{{- $document := $page.ActivityStream .Object -}}
+		{{- $author := $document.AttributedTo -}}
+		<div class="h-entry">
+			<a href="{{.Object}}" class="u-url"></a>
+			<div class="flex-row clickable" role="link" script="on click go to url '{{.Object}}'">
+				<div class="flex-shrink-0" style="width:80px;">
+					{{- if $author.NotNil -}}
+						{{- if ne "" $author.Icon.Href -}}
+							<img src="{{$author.Icon.Href}}" loading="lazy" class="circle width-64">
+						{{- end -}}
+					{{- end -}}
+				</div>
+				<div class="margin-right-md">
+					<div class="u-in-reply-to h-cite">
+						<div class="text-gray">
+							{{ if $author.NotNil -}}
+								<a href="{{$author.ID}}" class="text-gray bold">{{$author.Name}}</a>
+							{{- else -}}
+								<span class="text-gray bold">{{$document.ID}}</span>
+							{{- end }}
+
+							{{- $publishedString := shortDate $document.Published -}}
+							{{- if ne "" $publishedString -}}
+								&middot; 
+								{{ $publishedString -}}
+							{{- end -}}
+						</div>
+						<div>
+							{{- if ne "" $document.Image.Href -}}
+								<div><img src="{{$document.Image.Href}}" loading="lazy" style="max-width:100%"></div>
+							{{- end -}}
+							{{- if ne "" $document.Content -}}
+								<div>
+									{{- $document.Content | textOnly}}
+								</div>
+							{{- end -}}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="flex-row">
+				<div class="flex-shrink-0" style="width:80px;"></div>
+				<div class="text-sm">
+					<span class="text-gray">
+						{{- if not $isMyself -}}
+							<span class="p-content">{{.Content}}</span>
+							<span class="p-name bold">{{.EnglishType}}</span>
+						{{- end}}
+						by
+						<span class="p-author">{{$page.DisplayName}}</span>
+						<time datetime="{{.CreateDateSeconds | isoDate }}" class="dt-published">{{.CreateDateSeconds | humanizeTime}}</time>
+					</span>
+				</div>
+			</div>
+		</div>
+		<hr>
+	{{- end -}}
+
+		<div hx-get="{{.ProfileURL}}/liked-list?createDate=LT:{{$last.CreateDate}}" hx-push-url="false" hx-trigger="intersect once" hx-target="this" hx-swap="outerHTML">
+			Just a sec...
+		</div>
+		{{- if eq 12 (len $responses) -}}
+		{{- end -}}
+
+{{- end -}}

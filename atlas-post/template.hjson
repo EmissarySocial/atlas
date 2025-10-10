@@ -1,0 +1,199 @@
+{
+	templateId: atlas-post
+	templateRole: event
+	model: Stream
+	containedBy: ["outbox"]
+	extends: ["base-intent", "base-social"]
+	icon: calendar
+	label: Post
+	description: Posts contain locations, datetimes, images, and text
+
+	roles: {
+		viewer: {
+			label: Viewer
+			description: This role can view the event details
+			privileged: true
+		}
+	}
+
+	states: {
+		default: {
+			label: Unpublished,
+			description: This item is only visible to artists and site owners.
+		}
+		published: {
+			label: Published,
+			description: This item is visible to everyone
+		}
+	}
+
+	schema: {
+		type:object
+		properties: {
+			content: {
+				type: object,
+				properties: {
+					type: {type:"string"}
+					raw: {type:"string"}
+					html: {type:"string", format:"html"}
+				}
+			}
+			imageUrl: {type:"string", format:"url"}
+			startDate: {type:"object", properties: {
+				date: {type:"string", format:"date"}
+				time: {type:"string", format:"time"}
+			}}
+			places: {
+				type:"array", 
+				items: {
+					type:"object"
+					properties: {
+						"name": {type:"string"}
+						"fullAddress": {type:"string"}
+						"latitude": {type:"number"}
+						"longitude": {type:"number"}
+					}
+				}
+			}
+			data: {
+				type:object
+				properties: {
+					tags: {type:"string"}
+				}
+			}
+		}
+	}
+
+	socialRole: Note
+	socialRules: [
+		// {target:"type", value:["Event","Article"]}
+		// {target:"name", expression:"{{.Data.city}} {{.Data.date}}"},
+		// {target:"summary", expression:"{{.Data.venue}}"},
+	]
+
+	search: {
+		type: "Event"
+		iconUrl:"{{.ImageURL}}"
+		text: "{{.Content.HTML}}<br><br>{{.Permalink}}"
+	}
+
+	tagPaths: ["data.tags"]
+
+	actions: {
+		create: {
+			roles:["author"]
+			steps: [
+				{do:"as-modal", steps: [
+					// {do:"view-html"}
+					{
+						do:edit
+						form: {
+							type: layout-vertical
+							label: Add a Note
+							children: [
+								{type:"text", path:"places.0.fullAddress", options:{placeholder:"Location...", required:true}}
+								{type:"textarea", path:"content.raw", options:{placeholder:"Your Message...", rows:6}}
+								{type:"upload", path:"imageUrl", label:"Attach Images", description:"Up to 6 images.", options:{placeholder:"Add up to 6 photos", accept:"image/*", delete:"/{{.StreamID}}/delete-image"}}
+								{type:"select", path:"", options:{provider:"atlas-post:durations"}}
+								{type:"select", path:"", options:{provider:"circles"}}
+							]
+						}
+					}
+				]}
+
+				{do:"upload-attachments", category:"image", fieldname:"imageUrl", download-path:"imageUrl", rules:{types:["webp"]}}
+				{do:"process-content", format:"MARKDOWN"}
+				{do:"process-tags", paths:"content.html"}
+				{do:"save-and-publish", outbox:"true"}
+				{do:"forward-to", url:"/{{.StreamID}}"}
+			]
+		}
+
+		view: {
+			roles:["author"]
+			stateRoles: {
+				published: ["viewer"]
+			}
+			steps:[
+				{do:"view-html"}
+			]
+		}
+
+		view-replies: {
+			roles:["author"]
+			stateRoles: {
+				published: ["viewer"]
+			}
+			steps:[
+				{do:"view-html"}
+			]
+		}
+
+		view-nearby: {
+			roles:["author"]
+			stateRoles: {
+				published: ["viewer"]
+			}
+			steps:[
+				{do:"view-html"}
+			]
+		}
+
+		edit: {
+			roles:["author"]
+			steps: [
+				{do:"as-modal", steps: [
+					// {do:"view-html"}
+					{
+						do:edit
+						form: {
+							type: layout-vertical
+							label: Edit Note
+							children: [
+								{type:"text", path:"places.0.fullAddress", options:{placeholder:"Location...", required:true}}
+								{type:"textarea", path:"content.raw", options:{placeholder:"Your Message...", rows:6}}
+								{type:"upload", path:"imageUrl", label:"Attach Images", description:"Up to 6 images.", options:{placeholder:"Add up to 6 photos", accept:"image/*", delete:"/{{.StreamID}}/delete-image"}}
+								{type:"select", path:"", options:{provider:"atlas-post:durations"}}
+								{type:"select", path:"", options:{provider:"circles"}}
+							]
+						}
+					}
+				]}
+
+				{do:"upload-attachments", category:"image", fieldname:"imageUrl", download-path:"imageUrl", rules:{types:["webp"]}}
+				{do:"process-content", format:"MARKDOWN"}
+				{do:"process-tags", paths:"content.html"}
+				{do:"save-and-publish", outbox:"true"}
+				{do:"forward-to", url:"/{{.StreamID}}"}
+			]
+		}
+
+		edit-sharing: {
+			roles: ["author"]
+			steps: [
+				{do:"as-modal", steps:[
+					{do:"set-circle-sharing", role:"viewer"}
+					{do:"save"}
+					{do:"refresh-page"}
+				]}
+			]
+		}
+
+		delete: {
+			roles: ["author"]
+			steps: [
+				{do:"unpublish", state:"default", outbox:"true"}
+				{do:"delete"}
+				{do:"refresh-page"}
+			]
+		}
+
+		delete-image: {
+			roles: ["author"]
+			steps: [
+				{do:"delete-attachments", fieldname:"imageUrl"}
+				{do:"save"}
+			]
+		}
+	}
+}

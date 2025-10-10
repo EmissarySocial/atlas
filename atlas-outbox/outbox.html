@@ -1,0 +1,83 @@
+<!-- Page content -->
+<div class="page h-card" script="on load take .selected from .nav-item for #nav-outbox">
+
+	<title>{{.DisplayName}}</title>
+
+	<!-- Metadata -->
+	<link rel="icon" href="{{.IconURL}}"/>
+
+	<!-- ActivityPub links -->
+	<link rel="http://webfinger.net/rel/profile-page" href="{{.ProfileURL}}"/>
+	<link rel="http://ostatus.org/schema/1.0/subscribe" href="{{.Host}}/.ostatus/tunnel?uri={uri}">
+	<link rel="self" type="application/activity+json" href="{{.ActivityPubURL}}"/>
+
+	<!-- RSS and WebSub Links -->
+	<link rel="hub" href="{{.Host}}/@{{.UserID}}/websub"/>
+	<link rel="alternate" type="application/rss+xml" href="{{.Host}}/@{{.UserID}}/feed?format=rss"/>
+	<link rel="alternate" type="application/atom+xml" href="{{.Host}}/@{{.UserID}}/feed?format=atom"/>
+	<link rel="alternate" type="application/feed+json" href="{{.Host}}/@{{.UserID}}/feed?format=json"/>	
+	<link rel="canonical" class="u-url" href="{{.ProfileURL}}">
+
+	<div class="margin-vertical pos-relative">
+		{{- if .IsMyself -}}
+			<button type="button" hx-get="/@me/icon-edit" class="text-xs margin-vertical-none pos-absolute" style="top:0px; right:0px;">Edit</button>
+		{{- end -}}
+	
+		<div style="width:90%; max-width:200px; margin:0px auto;">
+			{{- if ne "" .ActivityPubIconURL -}}
+				<img class="circle u-photo width-100%" src="{{.ActivityPubIconURL}}" loading="lazy">
+			{{- else -}}
+				<div class="circle" style="width:90%; max-width:200px; margin:0px auto;"></div>
+			{{- end -}}
+		</div>
+	</div>
+
+	<div class="margin-vertical align-center pos-relative">
+		{{- if .IsMyself -}}
+			<div class="pos-absolute-top-right">
+				<button hx-get="/@me/edit" class="text-xs">Edit</button>
+			</div>
+		{{- end -}}
+		
+		<h1 class="p-name margin-none text-lg bold align-center">{{.DisplayName}}</h1>
+		<div script="install SelectText" class="text-sm gray50 ellipsis align-center">@{{.Username}}@{{.Hostname}}</div>
+		{{- if not .Myself -}}
+			<div class="margin-top">
+				<button type="button" class="primary width-100% ellipsis" hx-get="/@{{.UserID}}/intent?intent=follow&object={{.Permalink}}">{{icon "add-circle"}} Follow {{.DisplayName}}</button>
+			</div>
+		{{- end -}}
+
+		<div class="margin-top">
+			<span class="p-note">{{.StatusMessage}}</span>
+		</div>
+
+		{{- if ne "" .Location -}}
+			<div class="margin-top p-adr"><span class="p-label">{{icon "location"}} {{.Location}}</a></div>
+		{{- end -}}
+
+	</div>
+
+	<div class="margin-vertical">
+
+		{{if .IsMyself -}}
+			<div class="margin-bottom">
+				<div style="max-width:600px;">
+					<button hx-get="/@{{.UserID}}/outbox-add">+ New Post</button>
+				</div>
+			</div>
+		{{- end -}}
+
+		<div class="h-feed">
+			{{ .View "outbox-list"}}
+		</div>
+	</div>
+
+	<div
+		hx-get="/@{{.UserID}}" 
+		hx-trigger="refreshPage from:window" 
+		hx-target="#main" 
+		hx-swap="innerHTML"
+		hx-push-url="false">
+	</div>
+	
+</div>

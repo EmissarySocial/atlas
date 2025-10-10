@@ -1,0 +1,53 @@
+{
+	templateId: atlas-outbox
+	templateRole: user-outbox
+	model: Outbox
+	label: Atlas Outbox
+	description: Create Atlas posts
+	icon: inbox
+	extends: ["user-outbox"]
+	schema: {
+		title: Atlax Profile
+		type: object
+		properties: {
+			feeds: {
+				description: Array of additional links to render on the profile page
+				type: array
+				items: {
+					type: object
+					properties: {
+						url: {type: "string"}
+						name: {type: "string"}
+					}
+				}
+			}
+		}
+	}
+
+	states: {
+		default: {
+			label: Default
+			description: Default state for Bandwagon Common
+		}
+	}
+
+	actions: {
+	
+		outbox-add: {
+			roles: ["self"]
+			steps: [
+				{
+					do: add-stream
+					style: inline
+					location: outbox
+					template: atlas-post
+					title: + Add a Post
+					set-permissions: {copy:true, editor:["self"]}
+				}
+				{do:"set-data", values:{"data.show-events":"true"}}
+				{do: "save"}
+				{do: "refresh-page"}
+			]
+		}
+	}
+}	

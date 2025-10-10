@@ -1,0 +1,79 @@
+<div id="app-sidebar" class="expanded">
+	
+	<link rel="canonical" class="u-url" href="{{.ProfileURL}}">
+
+	<div class="margin-bottom" style="position:relative;">
+		{{- if .IsMyself -}}
+			<button type="button" hx-get="/@me/icon-edit" class="text-xs margin-vertical-none pos-absolute" style="top:0px; right:0px;">Edit</button>
+		{{- end -}}
+	
+		<div style="width:90%; max-width:200px; margin:0px auto;">
+			{{- if ne "" .ActivityPubIconURL -}}
+				<img class="circle u-photo width-100%" src="{{.ActivityPubIconURL}}" loading="lazy">
+			{{- else -}}
+				<div class="circle" style="width:90%; max-width:200px; margin:0px auto;"></div>
+			{{- end -}}
+		</div>
+	</div>
+
+	<div class="margin-bottom">
+		{{- if .IsMyself -}}
+			<button hx-get="/@me/edit" class="text-xs float-right">Edit</button>
+		{{- end -}}
+		
+		<h1 class="p-name margin-none">{{.DisplayName}}</h1>
+		<div script="install SelectText" class="text-sm gray50 ellipsis">@{{.Username}}@{{.Hostname}}</div>
+		{{- if not .Myself -}}
+			<div class="margin-top">
+				<button type="button" class="primary width-100% ellipsis" hx-get="/@{{.UserID}}/intent?intent=follow&object={{.Permalink}}">{{icon "add-circle"}} Follow {{.DisplayName}}</button>
+			</div>
+		{{- end -}}
+
+		<div class="margin-top">
+			<span class="p-note">{{.StatusMessage}}</span>
+		</div>
+
+		{{- if ne "" .Location -}}
+			<div class="margin-top p-adr"><span class="p-label">{{icon "location"}} {{.Location}}</a></div>
+		{{- end -}}
+
+	</div>
+
+	<div class="margin-top align-left">
+
+		{{- $links := .Links -}}
+
+		{{- if eq 0 (len $links) -}}
+
+			{{- if .IsMyself -}}
+				<hr>
+				<button type="button" hx-get="/@me/links">Add Links</button>
+			{{- end -}}
+
+		{{- else -}}
+
+			{{- if .IsMyself  -}}
+				<hr>
+				<div class="margin-top-xs float-right">
+					<button type="button" hx-get="/@me/links" class="text-xs margin-vertical-none">Edit</button>
+				</div>
+			{{- end -}}
+
+			{{- range $links -}}
+				<div class="margin-top-xs"><a rel="me" class="text-plain u-url" href="{{.ProfileURL}}" target="_blank">{{icon "globe"}} {{.Name}}</a></div>
+			{{- end -}}
+		{{- end -}}
+
+	</div>
+
+	{{- if .IsMyself -}}
+		<hr>
+		<div class="bold">Personal Settings</div>
+		<div class="margin-top-xs"><a href="/@me/settings/following" class="text-plain">{{icon "person"}} {{.FollowingCount}} Following</a></div>
+		<div class="margin-top-xs"><a href="/@me/settings/followers" class="text-plain">{{icon "person"}} {{.FollowerCount}} {{pluralize .FollowerCount "Follower" "Followers"}}</a></div>
+		<div class="margin-top-xs"><a href="/@me/settings/rules" class="text-plain">{{icon "rule"}} {{.RuleCount}} {{pluralize .RuleCount "Rule" "Rules"}}</a></div>
+		<div class="margin-top-xs"><a hx-get="/@me/edit-template" class="text-plain">{{icon "template"}} Template</a></div>
+		<div class="margin-top"><button hx-post="/signout" hx-target="body">Sign Out</button></div>
+	{{- end -}}
+
+</div>

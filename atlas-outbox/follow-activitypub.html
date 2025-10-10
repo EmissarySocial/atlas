@@ -1,0 +1,37 @@
+{{- template "follow-heading" . -}}
+
+<h2>Have an Account?</h2>
+
+<div class="margin-bottom">
+	Enter your Fediverse address to get automatic updates on your social inbox.
+</div>
+
+<form hx-post="/.ostatus/discover" hx-target="#htmx-response-message" hx-swap="innerHTML" class="margin-bottom">
+	<div class="flex-row" style="margin-bottom:4px;">
+		<input type="hidden" name="localAccount" value="{{.ProfileURL}}"/>
+		<input type="text" name="remoteAccount" placeholder="https://yoursite.social/@yourname" autofocus autocomplete="url"/>
+		<button class="primary nowrap">Follow from<br>my own server</button>
+	</div>
+	<div id="htmx-response-message" class="text-red">&nbsp;</div>
+</form>
+
+<div>
+	<h2>Need an Account?</h2>
+
+	{{- if .DomainHasRegistrationForm -}}
+		<a href="/register" class="primary button">Sign Up Now</a>
+		<a href="https://emissary.social/hosting" class="button">Find Another Host</a>
+		<button script="on click trigger closeModal">Cancel</button>
+		
+	{{- else -}}
+		Signups on this site are closed, but you can still follow {{.DisplayName}}
+		from any Fediverse host. Check out this 
+		<a href="https://emissary.social/hosting" target="_blank">list of trustworthy providers</a>
+		to get started.
+		<br>
+		<br>	
+		<button script="on click trigger closeModal">Close Window</button>
+	{{- end -}}
+</div>
+
+

@@ -1,0 +1,43 @@
+<!-- Page content -->
+<div class="framed page app h-card">
+
+	<title>{{.DisplayName}}</title>
+
+	<!-- Metadata -->
+	<link rel="icon" href="{{.IconURL}}"/>
+
+	<!-- ActivityPub links -->
+	<link rel="http://webfinger.net/rel/profile-page" href="{{.ProfileURL}}"/>
+	<link rel="http://ostatus.org/schema/1.0/subscribe" href="{{.Host}}/.ostatus/tunnel?uri={uri}">
+	<link rel="self" type="application/activity+json" href="{{.ActivityPubURL}}"/>
+
+	<!-- RSS and WebSub Links -->
+	<link rel="hub" href="{{.Host}}/@{{.UserID}}/websub"/>
+	<link rel="alternate" type="application/rss+xml" href="{{.Host}}/@{{.UserID}}/feed?format=rss"/>
+	<link rel="alternate" type="application/atom+xml" href="{{.Host}}/@{{.UserID}}/feed?format=atom"/>
+	<link rel="alternate" type="application/feed+json" href="{{.Host}}/@{{.UserID}}/feed?format=json"/>
+
+	{{ .View "sidebar" }}
+
+	<div class="app-content">
+
+		<div role="tablist" class="underlined">
+			<a role="tab" hx-get="/@{{.UserID}}" class="turboclick">Posts</a>
+			<span role="tab" aria-selected="true">Replies</span>
+			<a role="tab" hx-get="/@{{.UserID}}/liked" class="turboclick">Likes</a>
+		</div>
+
+		<div>
+			{{.View "replied-list"}}
+		</div>
+	</div>
+
+	<div
+		hx-get="/@{{.UserID}}/replied" 
+		hx-trigger="refreshPage from:window" 
+		hx-target="#main" 
+		hx-swap="innerHTML"
+		hx-push-url="false">
+	</div>
+	
+</div>

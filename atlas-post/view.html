@@ -1,0 +1,75 @@
+<div class="page pos-relative">
+
+	<div class="margin-bottom">
+		{{ template "view-map" . }}
+	</div>
+
+	<div class="padding">
+		<div class="bubble">
+			{{- .ContentHTML -}}
+
+			{{- if .UserCan "edit" -}}
+				<div class="text-xs pos-absolute-top-right">
+					<button hx-get="/{{.StreamID}}/edit">Edit</button>
+				</div>
+			{{- end -}}
+		</div>
+
+		<div class="flex-row">
+			<div>
+				<img src="{{.AttributedTo.IconURL}}" class="width-48 circle">
+			</div>
+			<div>
+				<div class="bold">
+					<a href="{{.AttributedTo.ProfileURL}}">{{.AttributedTo.Name}}</a>
+				</div>
+				<div class="text-gray">{{.PublishDate | tinyDate}}</div>
+			</div>
+		</div>
+
+		<div hx-get="/{{.StreamID}}/view-replies" hx-trigger="load" hx-target="this" hx-swap="innerHTML" hx-push-url="false"></div>
+	</div>
+
+</div>
+
+<style>
+	#map {
+		width:100%;
+		aspect-ratio:1;
+		background-color:#eee;
+	}
+
+	/* Adapted From: https://codepen.io/JoeHastings/pen/gPrPMo */
+	div.bubble {
+		position: relative;
+		text-align: left;
+		margin-bottom: 24px;
+		background-color: #fff;
+		border: 2px solid gray;
+		border-radius: 16px;
+		padding: 16px 32px;
+	}
+
+	div.bubble:before,
+	div.bubble:after {
+		content: ' ';
+		position: absolute;
+		width: 0;
+		height: 0;
+	}
+
+	div.bubble:before {
+		left: 24px;
+		bottom: -20px;
+		border: 10px solid;
+		border-color: gray transparent transparent gray;
+	}
+
+	div.bubble:after {
+		left: 26px;
+		bottom: -16px;
+		border: 8px solid;
+		border-color: #fff transparent transparent #fff;
+	}
+
+</style>
