@@ -7,11 +7,13 @@
 		{{- $hasGeocode := $venue.HasGeocode -}}
 		
 		{{if $hasGeocode}}
-			<div id="map" style="width:100%; border:solid 1px var(--gray30);"></div>
+			<div id="map" class="width-100% square"></div>
+			<!--
 			<div class="align-right text-xs">
 				Maps &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>. &nbsp;
 				Icon by <a href="https://icons8.com/icon/13800/location" target="_blank">Icons8</a>
 			</div>
+			-->
 
 			<div class="h-geo">
 				<data id="longitude" class="p-longitude" value="{{$venue.Longitude}}"></data>

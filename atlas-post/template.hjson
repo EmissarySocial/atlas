@@ -146,6 +146,7 @@
 					// {do:"view-html"}
 					{
 						do:edit
+						options:["delete:/{{.StreamID}}/delete"]
 						form: {
 							type: layout-vertical
 							label: Edit Note
@@ -183,8 +184,8 @@
 			roles: ["author"]
 			steps: [
 				{do:"unpublish", state:"default", outbox:"true"}
-				{do:"delete"}
-				{do:"refresh-page"}
+				{do:"delete", title:"Delete this Post?"}
+				{do:"forward-to", url:"{{.AttributedTo.ProfileURL}}"}
 			]
 		}
 
