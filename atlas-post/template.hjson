@@ -59,9 +59,21 @@
 				type:object
 				properties: {
 					tags: {type:"string"}
+					deleteAfter: {type:"integer", required:true, default:0}
 				}
 			}
 		}
+	}
+
+	datasets: {
+		"deleteAfter": [
+			{value:"0", label:"Message is Permanent"},
+			{value:"1", label:"Disappear after 1 hour"}
+			{value:"12", label:"Disappear after 12 hours"}
+			{value:"24", label:"Disappear after 1 day"}
+			{value:"168", label:"Disappear after 7 days"}
+			{value:"720", label:"Disappear after 30 days"}
+		]
 	}
 
 	socialRole: Note
@@ -94,7 +106,7 @@
 								{type:"text", path:"places.0.fullAddress", options:{placeholder:"Location...", required:true}}
 								{type:"textarea", path:"content.raw", options:{placeholder:"Your Message...", rows:6}}
 								{type:"upload", path:"imageUrl", label:"Attach Images", description:"Up to 6 images.", options:{placeholder:"Add up to 6 photos", accept:"image/*", delete:"/{{.StreamID}}/delete-image"}}
-								{type:"select", path:"", options:{provider:"atlas-post:durations"}}
+								{type:"select", path:"data.deleteAfter", options:{provider:"atlas-post.deleteAfter"}}
 								{type:"select", path:"", options:{provider:"circles"}}
 							]
 						}
@@ -105,6 +117,7 @@
 				{do:"process-content", format:"MARKDOWN"}
 				{do:"process-tags", paths:"content.html"}
 				{do:"save-and-publish", outbox:"true"}
+				{do:"schedule-delete", hours:"{{.Data `deleteAfter`}}"}
 				{do:"forward-to", url:"/{{.StreamID}}"}
 			]
 		}
@@ -154,7 +167,7 @@
 								{type:"text", path:"places.0.fullAddress", options:{placeholder:"Location...", required:true}}
 								{type:"textarea", path:"content.raw", options:{placeholder:"Your Message...", rows:6}}
 								{type:"upload", path:"imageUrl", label:"Attach Images", description:"Up to 6 images.", options:{placeholder:"Add up to 6 photos", accept:"image/*", delete:"/{{.StreamID}}/delete-image"}}
-								{type:"select", path:"", options:{provider:"atlas-post:durations"}}
+								{type:"select", path:"data.deleteAfter", options:{provider:"atlas-post.deleteAfter"}}
 								{type:"select", path:"", options:{provider:"circles"}}
 							]
 						}
@@ -165,6 +178,7 @@
 				{do:"process-content", format:"MARKDOWN"}
 				{do:"process-tags", paths:"content.html"}
 				{do:"save-and-publish", outbox:"true"}
+				{do:"schedule-delete", hours:"{{.Data `deleteAfter`}}"}
 				{do:"forward-to", url:"/{{.StreamID}}"}
 			]
 		}
