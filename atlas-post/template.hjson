@@ -99,6 +99,7 @@
 					// {do:"view-html"}
 					{
 						do:edit
+						options:["submit-label:Add"]
 						form: {
 							type: layout-vertical
 							label: Add a Note
@@ -107,7 +108,7 @@
 								{type:"textarea", path:"content.raw", options:{placeholder:"Your Message...", rows:6}}
 								{type:"upload", path:"imageUrl", label:"Attach Images", description:"Up to 6 images.", options:{placeholder:"Add up to 6 photos", accept:"image/*", delete:"/{{.StreamID}}/delete-image"}}
 								{type:"select", path:"data.deleteAfter", options:{provider:"atlas-post.deleteAfter"}}
-								{type:"select", path:"", options:{provider:"circles"}}
+								// {type:"select", path:"", options:{provider:"circles"}}
 							]
 						}
 					}
@@ -159,7 +160,7 @@
 					// {do:"view-html"}
 					{
 						do:edit
-						options:["delete:/{{.StreamID}}/delete"]
+						options:["submit-label:Update","delete:/{{.StreamID}}/delete"]
 						form: {
 							type: layout-vertical
 							label: Edit Note
@@ -168,7 +169,7 @@
 								{type:"textarea", path:"content.raw", options:{placeholder:"Your Message...", rows:6}}
 								{type:"upload", path:"imageUrl", label:"Attach Images", description:"Up to 6 images.", options:{placeholder:"Add up to 6 photos", accept:"image/*", delete:"/{{.StreamID}}/delete-image"}}
 								{type:"select", path:"data.deleteAfter", options:{provider:"atlas-post.deleteAfter"}}
-								{type:"select", path:"", options:{provider:"circles"}}
+								// {type:"select", path:"", options:{provider:"circles"}}
 							]
 						}
 					}
