@@ -31,7 +31,8 @@
 		}
 	}
 	startupStreams: [
-		{templateId:"article-markdown", token:"home", label:"About Mobie", rank:2}
+		{templateId:"atlas-search", token:"home", label:"About Atlas", icon:"home", rank:1}
+		{templateId:"article-markdown", token:"about", label:"About Atlas", icon:"info", rank:2}
 	]
 	startupGroups:[
 		{label:"Publishers"}

@@ -59,7 +59,7 @@
 				type:object
 				properties: {
 					tags: {type:"string"}
-					deleteAfter: {type:"integer", required:true, default:0}
+					deleteAfter: {type:"string", required:true}
 				}
 			}
 		}
@@ -96,6 +96,7 @@
 			roles:["author"]
 			steps: [
 				{do:"as-modal", steps: [
+					{do:"set-data", defaults:{"data.deleteAfter":0}}
 					// {do:"view-html"}
 					{
 						do:edit
@@ -106,7 +107,7 @@
 							children: [
 								{type:"text", path:"places.0.fullAddress", options:{placeholder:"Location...", required:true}}
 								{type:"textarea", path:"content.raw", options:{placeholder:"Your Message...", rows:6}}
-								{type:"upload", path:"imageUrl", label:"Attach Images", description:"Up to 6 images.", options:{placeholder:"Add up to 6 photos", accept:"image/*", delete:"/{{.StreamID}}/delete-image"}}
+								{type:"upload", path:"imageUrl", label:"Attach Photos (up to 6)", options:{accept:"image/*", delete:"/{{.StreamID}}/delete-image"}}
 								{type:"select", path:"data.deleteAfter", options:{provider:"atlas-post.deleteAfter"}}
 								// {type:"select", path:"", options:{provider:"circles"}}
 							]
@@ -114,7 +115,7 @@
 					}
 				]}
 
-				{do:"upload-attachments", category:"image", fieldname:"imageUrl", download-path:"imageUrl", rules:{types:["webp"]}}
+				{do:"upload-attachments", category:"image", fieldname:"imageUrl", rules:{types:["webp"]}}
 				{do:"process-content", format:"MARKDOWN"}
 				{do:"process-tags", paths:"content.html"}
 				{do:"save-and-publish", outbox:"true"}

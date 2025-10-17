@@ -60,7 +60,7 @@
 		create: {
 			roles:["owner"]
 			steps: [
-				{do: "set-data", defaults: {label: "New Page"}}
+				{do: "set-data", defaults: {label: "New Page", icon:"home"}}
 				{
 					do:edit
 					form: {

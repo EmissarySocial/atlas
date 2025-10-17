@@ -1,4 +1,4 @@
-<div class="page pos-relative">
+<div class="page pos-relative" style="background-color:var(--gray10);">
 
 	<div class="margin-bottom">
 		{{ template "view-map" . }}
@@ -44,9 +44,9 @@
 		position: relative;
 		text-align: left;
 		margin-bottom: 24px;
-		background-color: #eee;
-		border: 2px solid gray;
-		border-radius: 16px;
+		background-color: var(--white);
+		border: 1px solid var(--gray30);
+		border-radius: calc(var(--rhythm) * 2);
 		padding: 16px 32px;
 	}
 
@@ -62,14 +62,14 @@
 		left: 24px;
 		bottom: -20px;
 		border: 10px solid;
-		border-color: gray transparent transparent gray;
+		border-color: var(--gray30) transparent transparent var(--gray30);
 	}
 
 	div.bubble:after {
 		left: 26px;
 		bottom: -16px;
 		border: 8px solid;
-		border-color: #eee transparent transparent #eee;
+		border-color: var(--white) transparent transparent var(--white);
 	}
 
 </style>

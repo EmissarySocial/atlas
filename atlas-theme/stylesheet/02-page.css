@@ -8,7 +8,7 @@
     position:relative;
 	line-height:150%;
 	border: none;
-	padding: 0px;
+	padding: var(--rhythm);
 	font-weight:400;
 	width:100%;
 	margin:0px;
@@ -19,6 +19,18 @@
 	position: relative;
 	width:100%;
 	margin:0px;
+}
+
+.app {
+	container-type: inline-size;
+    position:relative;
+	line-height:150%;
+	border: none;
+	padding: 0;
+	font-weight:400;
+	width:100%;
+	margin:0px;
+    background-color: var(--page-background);
 }
 
 /******************************************
