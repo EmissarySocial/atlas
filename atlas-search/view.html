@@ -10,9 +10,23 @@
 	<!-- https://wiki.openstreetmap.org/wiki/Openlayers_marker_multilayer_example -->
 
 	<script>
-		async function showMap() {
+		async function getSavedLocation() {
+			if (localStorage.getItem("latitude") && localStorage.getItem("longitude")) {
+				return {
+					latitude: parseFloat(localStorage.getItem("latitude")),
+					longitude: parseFloat(localStorage.getItem("longitude"))
+				}
+			}
+
 			var response = await fetch("/.geocode/ip")
-			var data = await response.json()
+			return await response.json()
+		}
+
+		function saveLocation() {
+
+		}
+
+		async function showMap() {
 
 			map = new OpenLayers.Map("map");
 			map.addLayer(new OpenLayers.Layer.OSM(
@@ -46,9 +60,10 @@
 			
 			map.setCenter (lonLat, zoom);
 			*/
+			var location = await getSavedLocation()
 			var zoom=16;
-			var lonLat = new OpenLayers.LonLat(data.longitude, data.latitude)
-			console.log(data)
+			var lonLat = new OpenLayers.LonLat(location.longitude, location.latitude)
+			console.log(location)
 			console.log(lonLat)
 			lonLat = lonLat.transform(
 				new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
