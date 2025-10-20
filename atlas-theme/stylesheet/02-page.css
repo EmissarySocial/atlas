@@ -9,6 +9,7 @@
 	line-height:150%;
 	border: none;
 	padding: var(--rhythm);
+	padding-bottom:48px;
 	font-weight:400;
 	width:100%;
 	margin:0px;
