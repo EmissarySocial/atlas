@@ -87,7 +87,7 @@
 		summary:"{{.Content.HTML | summary}}",
 	}
 
-	tagPaths: ["data.tags"]
+	tagPaths: ["content.html"]
 
 	actions: {
 		create: {
