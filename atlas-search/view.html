@@ -13,6 +13,23 @@
 	<script>
 		var map = L.map('map')
 
+		showResults();
+
+		async function showResults() {
+			showMap();
+
+			var data = await fetch("/{{.StreamID}}/view-results")
+			var items = await data.json()
+
+			for (item of items) {
+				var coordinates = item.place.location.coordinates
+				latLng = L.latLng(coordinates[1], coordinates[0])
+
+				var marker = L.marker(latLng).addTo(map);
+				marker.bindPopup(item.summary + "<br><br><a href='" + item.url + "'>View &rarr;</a>");
+			}
+		}
+
 		async function showMap() {
 
 			var loc = await getSavedLocation();
@@ -59,95 +76,6 @@
 			return result;
 		}
 
-		async function showResults() {
-			showMap();
-
-			var data = await fetch("/{{.StreamID}}/view-results")
-			var items = await data.json()
-
-			for (item of items) {
-				var coordinates = item.place.location.coordinates
-				latLng = L.latLng(coordinates[1], coordinates[0])
-
-				var marker = L.marker(latLng).addTo(map);
-				marker.bindPopup(item.summary + "<br><br><a href='" + item.url + "'>View &rarr;</a>");
-			}
-		}
-
-		showResults();
 	</script>
 
-	<!--
-			/*
-			async function showMap() {
-
-				map = new OpenLayers.Map("map");
-				map.addLayer(new OpenLayers.Layer.OSM(
-					"",
-					["https://tile.openstreetmap.org/${z}/${x}/${y}.png"],
-					{
-						"attribution": "",
-						"tileOptions": {"crossOriginKeyword": null }}
-					)
-				);
-
-				/*
-				var zoom=14;
-				var longitude = parseFloat(document.getElementById("longitude").value);
-				var latitude = parseFloat(document.getElementById("latitude").value);
-				var lonLat = new OpenLayers.LonLat(longitude, latitude)
-
-				lonLat = lonLat.transform(
-					new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
-					map.getProjectionObject() // to Spherical Mercator Projection
-				);
-			
-				var markers = new OpenLayers.Layer.Markers( "Markers" );
-				map.addLayer(markers);
-				
-				var size = new OpenLayers.Size(32,32);
-				var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
-				var icon = new OpenLayers.Icon("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAADGUlEQVR4nO2aS0hVURSG/8pepDWM7AFFBZk1CdTuXeucHko2qAbRpGkkiaLUJCcNgmjeoIggEGleNGkShRSRSJNUGkVBZVH0VkrF/tjn3m5iaXuf1z1CCxZcLpd//9866yz22ecC/6MQVKyloIWKHgoeUfCOggkqxql4S0U/Bd1UHGMO1chKUNBMxV0qJqmgZZrf3qagsbzGBX0Opv+eggepgrARKyi4Ftn4nyDdzKEqWfMeNlHwJHbzWsoh+tiYlPltFLxJ0DyLV2KYHrbEaz6HagpeJG5eS/mKPtbEY34HFgYjMD3zLOZD+qiIDqA4WwbzLOaZaObzWEfBN8cefkwPncxjK5uwLEjz2XwnGHAEGGUDVkep/kUH498paCUwf0a9I1hARRsVYw4QF8KZz6GKii/W5j3sdijMHmsIwSdzFd0BFIcdqnQihH67g/4hdwDBZeuen6Vt/tFOg5YAl8IA2O1zBB3O4r/XOGkJcN9dvLAFtgGoCQ3go9Zyjdfu4ubGtBH3URkaIBcMCqsh4S5uZrCNeIQdJOuw3BLgq7u44FlmWkjxNAxAr5W4h87Eb2LBnTDi5y3FB8xIDDlGhyyvwDl3gDz2W4qbbHPWF3Q46O9zB2jGYio+WC4wRsFeB/ONxdMKWuR71mCRM0CwkOKKQ5XM3qZ9tnYK2qZQeVvzNDuCUOaLlap3APiVg8HNaSaMj8pi1lJwyqHnOSXrQgMEEIp7IRaNJwW9kcwHAB4Olg0gjwORAQIIc/iUfvX7CMyLB0DhpQ7g2T8g2UEIbqQIcD1W81Me8EdSMD9KxfrYAQIIRVcKvX86EfMBgI+KhG/ofnOQlhhAACHYYH1a4Vb5EQo2J2p+CkRLAgDHUzFfglDcjBHgVmwz3xqgHiuDo/DolR82WqmaL0F42Ol4TDg9x+lBy2K+BFE46wxb/VZkIai4GgKgB1kJNmCp40uQfvpYgiwFFauoeG5h/mVsr4/iDnNGRMHHWcx/pmA7shzMY9cMk8lMnCbMhaCHo9P+ejBpvsNcCprXTQXzP8K8AEEWorj97kpykZ+xubp/rAMA/QAAAABJRU5ErkJggg==", size, offset);
-				var marker = new OpenLayers.Marker(lonLat, icon)
-				markers.addMarker(marker);
-				
-				map.setCenter (lonLat, zoom);
-			///
-				var location = await getSavedLocation()
-				var zoom=16;
-				var lonLat = new OpenLayers.LonLat(location.longitude, location.latitude)
-				console.log(location)
-				console.log(lonLat)
-				lonLat = lonLat.transform(
-					new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
-					map.getProjectionObject() // to Spherical Mercator Projection
-				);
-			
-				map.setCenter (lonLat, zoom);
-				console.log("done?")
-			}*/
-
-
-			/*
-			(function(){
-
-				var latitude = 0;
-				var longitude = 0;
-
-				if ("geolocation" in navigator) {
-
-					navigator.geolocation.getCurrentPosition(
-						(position) => {
-							console.log(position)
-						}, 
-						
-						(error) => {
-							console.log(error)
-						}
-					)
-				}
-			})()
-			*/
-
-	-->
 </div>
