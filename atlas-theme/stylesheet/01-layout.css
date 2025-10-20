@@ -19,8 +19,6 @@ main {
 	flex-direction:row;
 	justify-content: center;
 	container-type:inline-size;
-	-overflow-x:hidden;
-	-overflow-y:auto;
 	overscroll-behavior: none;
 }
 
