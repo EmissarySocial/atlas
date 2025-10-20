@@ -117,7 +117,7 @@
 				{do:"upload-attachments", category:"image", fieldname:"imageUrl", rules:{types:["webp"]}}
 				{do:"process-content", format:"MARKDOWN"}
 				{do:"process-tags", paths:"content.html"}
-				{do:"set-circle-sharing", role:"viewer"}
+				{do:"set-circle-sharing", role:"viewer", method:"post"}
 				{do:"save-and-publish", outbox:"true"}
 				{do:"search-index"}
 				{do:"schedule-delete", hours:"{{.Data `deleteAfter`}}"}
@@ -179,7 +179,7 @@
 				{do:"upload-attachments", category:"image", fieldname:"imageUrl", rules:{types:["webp"]}}
 				{do:"process-content", format:"MARKDOWN"}
 				{do:"process-tags", paths:"content.html"}
-				{do:"set-circle-sharing", role:"viewer"}
+				{do:"set-circle-sharing", role:"viewer", method:"post"}
 				{do:"save-and-publish", outbox:"true"}
 				{do:"search-index"}
 				{do:"schedule-delete", hours:"{{.Data `deleteAfter`}}"}
