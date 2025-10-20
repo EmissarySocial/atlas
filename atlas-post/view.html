@@ -5,7 +5,7 @@
 	</div>
 
 	<div class="bubble">
-		<div class="padding md:flex-row">
+		<div class="md:flex-row">
 			<div class="md:width-50% text-lg">
 				{{- .ContentHTML -}}
 			</div>
@@ -16,7 +16,7 @@
 
 		{{- $attachments := .Attachments -}}
 		{{- if $attachments.NotEmpty -}}
-			<div class="padding cols-4">
+			<div class="cols-4 margin-top">
 				{{- range $index, $attachment := $attachments -}}
 					<div>
 						<img src="{{$attachment.URL}}" class="width-100%">
