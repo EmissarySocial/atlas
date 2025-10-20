@@ -30,6 +30,7 @@
 				var map = L.map('map')
 				map.setView(latLng, zoom);
 				map.removeControl(map.zoomControl);
+				map.attributionControl.setPrefix("")
 				map.scrollWheelZoom.disable();
 				map.touchZoom.disable();
 				map.boxZoom.disable();

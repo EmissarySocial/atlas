@@ -1,3 +1,4 @@
+{{- $q := .QueryParam "q" -}}
 <div class="app">
 	<div id="map" class="pos-absolute-four-corners"></div>
 
@@ -18,7 +19,7 @@
 		async function showResults() {
 			showMap();
 
-			var data = await fetch("/{{.StreamID}}/view-results")
+			var data = await fetch("/{{.StreamID}}/view-results?q={{$q}}")
 			var items = await data.json()
 
 			for (item of items) {
@@ -26,7 +27,7 @@
 				latLng = L.latLng(coordinates[1], coordinates[0])
 
 				var marker = L.marker(latLng).addTo(map);
-				marker.bindPopup(item.summary + "<br><br><a href='" + item.url + "'>View &rarr;</a>");
+				marker.bindPopup(item.summary + "<br><br><a href='" + item.url + "' class='bold'>View &rarr;</a>");
 			}
 		}
 
@@ -35,6 +36,8 @@
 			var loc = await getSavedLocation();
 
 			map.setView([loc.latitude, loc.longitude], loc.zoom);
+			map.attributionControl.setPrefix("")
+			map.zoomControl.setPosition("topright");
 
 			L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 				maxZoom: 19,

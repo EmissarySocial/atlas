@@ -1,6 +1,6 @@
 nav {
 	position:fixed;
-	bottom:calc(var(--rhythm) * 2);
+	bottom:calc(var(--rhythm) * 0.5);
 	left:var(--rhythm);
 	right:var(--rhythm);
 	z-index:999;

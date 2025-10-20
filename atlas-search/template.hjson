@@ -29,14 +29,7 @@
 	}
 	roles: {}
 
-	bundles: {
-		/*javascript: {
-			content-type:application/javascript
-		}
-		hyperscript: {
-			content-type:text/hyperscript
-		}*/
-	}
+	bundles: {}
 
 	schema: {
 		type:object
