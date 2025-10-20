@@ -1,34 +1,50 @@
 <div class="page pos-relative" style="background-color:var(--gray10);">
 
-	<div class="margin-bottom">
-		{{ template "view-map" . }}
+	<div class="padding-horizontal padding-vertical-sm">
+		<a href="/home">&larr; Home</a>
 	</div>
 
-	<div class="padding">
-		<div class="bubble">
-			{{- .ContentHTML -}}
-
-			{{- if .UserCan "edit" -}}
-				<div class="text-xs pos-absolute-top-right">
-					<button hx-get="/{{.StreamID}}/edit">Edit</button>
-				</div>
-			{{- end -}}
-		</div>
-
-		<div class="flex-row">
-			<div>
-				<img src="{{.AttributedTo.IconURL}}" class="width-48 circle">
+	<div class="bubble">
+		<div class="padding flex-row">
+			<div class="md:width-50%">
+				{{- .ContentHTML -}}
 			</div>
-			<div>
-				<div class="bold">
-					<a href="{{.AttributedTo.ProfileURL}}">{{.AttributedTo.Name}}</a>
-				</div>
-				<div class="text-gray">{{.PublishDate | tinyDate}}</div>
+			<div class="md:width-50%">
+				{{ template "view-map" . }}
 			</div>
 		</div>
 
-		<div hx-get="/{{.StreamID}}/view-replies" hx-trigger="load" hx-target="this" hx-swap="innerHTML" hx-push-url="false"></div>
+		{{- $attachments := .Attachments -}}
+		{{- if $attachments.NotEmpty -}}
+			<div class="padding cols-4">
+				{{- range $index, $attachment := $attachments -}}
+					<div>
+						<img src="{{$attachment.URL}}" class="width-100%">
+					</div>
+				{{- end -}}
+			</div>
+		{{- end -}}
+			
+		{{- if .UserCan "edit" -}}
+			<div class="text-xs pos-absolute-top-right">
+				<button hx-get="/{{.StreamID}}/edit">Edit</button>
+			</div>
+		{{- end -}}
 	</div>
+
+	<div class="flex-row">
+		<div>
+			<img src="{{.AttributedTo.IconURL}}" class="width-48 circle">
+		</div>
+		<div>
+			<div class="bold">
+				<a href="{{.AttributedTo.ProfileURL}}">{{.AttributedTo.Name}}</a>
+			</div>
+			<div class="text-gray">{{.PublishDate | tinyDate}}</div>
+		</div>
+	</div>
+
+	<div hx-get="/{{.StreamID}}/view-replies" hx-trigger="load" hx-target="this" hx-swap="innerHTML" hx-push-url="false"></div>
 
 </div>
 

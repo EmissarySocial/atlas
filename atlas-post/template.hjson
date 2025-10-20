@@ -78,15 +78,13 @@
 
 	socialRole: Note
 	socialRules: [
-		// {target:"type", value:["Event","Article"]}
-		// {target:"name", expression:"{{.Data.city}} {{.Data.date}}"},
-		// {target:"summary", expression:"{{.Data.venue}}"},
+		{target:"type", value:["Note"]}
 	]
 
 	search: {
 		type: "Event"
-		iconUrl:"{{.ImageURL}}"
 		text: "{{.Content.HTML}}<br><br>{{.Permalink}}"
+		summary:"{{.Content.HTML | summary}}",
 	}
 
 	tagPaths: ["data.tags"]
@@ -109,6 +107,7 @@
 								{type:"textarea", path:"content.raw", options:{placeholder:"Your Message...", rows:6}}
 								{type:"upload", path:"imageUrl", label:"Attach Photos (up to 6)", options:{accept:"image/*", delete:"/{{.StreamID}}/delete-image"}}
 								{type:"select", path:"data.deleteAfter", options:{provider:"atlas-post.deleteAfter"}}
+								{type:"hidden", path:"circles", options:{value:"000000000000000000000000"}}
 								// {type:"select", path:"", options:{provider:"circles"}}
 							]
 						}
@@ -118,7 +117,9 @@
 				{do:"upload-attachments", category:"image", fieldname:"imageUrl", rules:{types:["webp"]}}
 				{do:"process-content", format:"MARKDOWN"}
 				{do:"process-tags", paths:"content.html"}
+				{do:"set-circle-sharing", role:"viewer"}
 				{do:"save-and-publish", outbox:"true"}
+				{do:"search-index"}
 				{do:"schedule-delete", hours:"{{.Data `deleteAfter`}}"}
 				{do:"forward-to", url:"/{{.StreamID}}"}
 			]
@@ -158,7 +159,6 @@
 			roles:["author"]
 			steps: [
 				{do:"as-modal", steps: [
-					// {do:"view-html"}
 					{
 						do:edit
 						options:["submit-label:Update","delete:/{{.StreamID}}/delete"]
@@ -170,29 +170,20 @@
 								{type:"textarea", path:"content.raw", options:{placeholder:"Your Message...", rows:6}}
 								{type:"upload", path:"imageUrl", label:"Attach Images", description:"Up to 6 images.", options:{placeholder:"Add up to 6 photos", accept:"image/*", delete:"/{{.StreamID}}/delete-image"}}
 								{type:"select", path:"data.deleteAfter", options:{provider:"atlas-post.deleteAfter"}}
-								// {type:"select", path:"", options:{provider:"circles"}}
+								{type:"hidden", path:"circles", options:{value:"000000000000000000000000"}}
 							]
 						}
 					}
 				]}
 
-				{do:"upload-attachments", category:"image", fieldname:"imageUrl", download-path:"imageUrl", rules:{types:["webp"]}}
+				{do:"upload-attachments", category:"image", fieldname:"imageUrl", rules:{types:["webp"]}}
 				{do:"process-content", format:"MARKDOWN"}
 				{do:"process-tags", paths:"content.html"}
+				{do:"set-circle-sharing", role:"viewer"}
 				{do:"save-and-publish", outbox:"true"}
+				{do:"search-index"}
 				{do:"schedule-delete", hours:"{{.Data `deleteAfter`}}"}
 				{do:"forward-to", url:"/{{.StreamID}}"}
-			]
-		}
-
-		edit-sharing: {
-			roles: ["author"]
-			steps: [
-				{do:"as-modal", steps:[
-					{do:"set-circle-sharing", role:"viewer"}
-					{do:"save"}
-					{do:"refresh-page"}
-				]}
 			]
 		}
 

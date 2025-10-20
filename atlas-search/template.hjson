@@ -149,7 +149,7 @@
 		view-results: {
 			roles: ["anonymous"]
 			steps:[
-				{do:"view-html"}
+				{do:"view-json", value:".Search.Top120.ByCreateDate.Reverse.Slice"}
 			]
 		}
 		view-suggestions: {
