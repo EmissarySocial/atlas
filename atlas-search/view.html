@@ -1,4 +1,8 @@
 {{- $q := .QueryParam "q" -}}
+{{- $lat := .QueryParam "lat" -}}
+{{- $lng := .QueryParam "lng" -}}
+{{- $zoom := .QueryParam "zoom" -}}
+
 <div class="app">
 	<div id="map" class="pos-absolute-four-corners"></div>
 
@@ -19,7 +23,7 @@
 		async function showResults() {
 			showMap();
 
-			var data = await fetch("/{{.StreamID}}/view-results?q={{$q}}")
+			var data = await fetch("/{{.StreamID}}/view-results?q={{queryEscape $q}}")
 			var items = await data.json()
 
 			for (item of items) {

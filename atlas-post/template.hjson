@@ -105,7 +105,7 @@
 							children: [
 								{type:"text", path:"places.0.fullAddress", options:{placeholder:"Location...", required:true}}
 								{type:"textarea", path:"content.raw", options:{placeholder:"Your Message...", rows:6}}
-								{type:"upload", path:"imageUrl", label:"Attach Photos (up to 6)", options:{accept:"image/*", delete:"/{{.StreamID}}/delete-image"}}
+								{type:"upload", path:"iconUrl", label:"Attach Photo", options:{accept:"image/*"}}
 								{type:"select", path:"data.deleteAfter", options:{provider:"atlas-post.deleteAfter"}}
 								{type:"hidden", path:"circles", options:{value:"000000000000000000000000"}}
 								// {type:"select", path:"", options:{provider:"circles"}}
@@ -114,9 +114,8 @@
 					}
 				]}
 
-				{do:"upload-attachments", category:"image", fieldname:"imageUrl", rules:{types:["webp"]}}
-				{do:"process-content", format:"MARKDOWN"}
-				{do:"process-tags", paths:"content.html"}
+				{do:"upload-attachments", category:"image", fieldname:"iconUrl", download-path:"iconUrl", rules:{types:["webp"]}}
+				{do:"process-content", format:"MARKDOWN", add-tags:true, tag-path:"/home?q="}
 				{do:"set-circle-sharing", role:"viewer", method:"post"}
 				{do:"save-and-publish", outbox:"true"}
 				{do:"search-index"}
@@ -155,6 +154,20 @@
 			]
 		}
 
+		view-attachment: {
+			roles:["author"]
+			stateRoles: {
+				published: ["viewer"]
+			}
+			steps:[
+				{do:"with-attachment", steps:[
+					{do:"as-modal", options:["class:huge"], steps:[
+						{do:"view-html"}
+					]}
+				]}
+			]
+		}
+
 		edit: {
 			roles:["author"]
 			steps: [
@@ -168,7 +181,7 @@
 							children: [
 								{type:"text", path:"places.0.fullAddress", options:{placeholder:"Location...", required:true}}
 								{type:"textarea", path:"content.raw", options:{placeholder:"Your Message...", rows:6}}
-								{type:"upload", path:"imageUrl", label:"Attach Images", description:"Up to 6 images.", options:{placeholder:"Add up to 6 photos", accept:"image/*", delete:"/{{.StreamID}}/delete-image"}}
+								{type:"upload", path:"iconUrl", label:"Attach a Photo", options:{accept:"image/*", delete:"/{{.StreamID}}/delete-attachment"}}
 								{type:"select", path:"data.deleteAfter", options:{provider:"atlas-post.deleteAfter"}}
 								{type:"hidden", path:"circles", options:{value:"000000000000000000000000"}}
 							]
@@ -176,9 +189,8 @@
 					}
 				]}
 
-				{do:"upload-attachments", category:"image", fieldname:"imageUrl", rules:{types:["webp"]}}
-				{do:"process-content", format:"MARKDOWN"}
-				{do:"process-tags", paths:"content.html"}
+				{do:"upload-attachments", category:"image", fieldname:"iconUrl", download-path:"iconUrl", rules:{types:["webp"]}}
+				{do:"process-content", format:"MARKDOWN", add-tags:true, tag-path:"/home?q="}
 				{do:"set-circle-sharing", role:"viewer", method:"post"}
 				{do:"save-and-publish", outbox:"true"}
 				{do:"search-index"}
@@ -196,10 +208,11 @@
 			]
 		}
 
-		delete-image: {
+		delete-attachment: {
 			roles: ["author"]
 			steps: [
-				{do:"delete-attachments", fieldname:"imageUrl"}
+				{do:"delete-attachments", category:"image"}
+				{do:"set-data", values:{"iconUrl": ""}}
 				{do:"save"}
 			]
 		}

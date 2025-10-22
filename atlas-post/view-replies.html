@@ -1,6 +1,10 @@
 <div role="tablist" class="pills margin-top-lg">
 	<div role="tab" aria-selected="true">Replies</div>
-	<div role="tab" hx-get="/{{.StreamID}}/view-nearby">Nearby</div>
+	<div role="tab" hx-get="/{{.StreamID}}/view-nearby" hx-swap="innerHTML scroll:none show:none">Nearby</div>
 </div>
 
-...
+<div class="margin-vertical-lg">
+	In the future, <b>replies</b> will display here when they're received, and will be 
+	updated <b>in real time</b>, so that this becomes a miniature, federated chat room 
+	for everyone following this event.
+</div>

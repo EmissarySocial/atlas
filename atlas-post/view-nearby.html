@@ -1,6 +1,11 @@
-	<div role="tablist" class="pills margin-top-lg">
-		<div role="tab" hx-get="/{{.StreamID}}/view-replies">Replies</div>
-		<div role="tab" aria-selected="true">Nearby</div>
-	</div>
+<div role="tablist" class="pills margin-top-lg">
+	<div role="tab" hx-get="/{{.StreamID}}/view-replies" hx-swap="innerHTML scroll:none show:none">Replies</div>
+	<div role="tab" aria-selected="true">Nearby</div>
+</div>
 
-	...
+<div class="margin-vertical-lg">
+	In the future, this tab will display other events nearby to this one.
+	I'll still need to work out how to sort based on geolocation data, but I'm 
+	pretty sure that MongoDB can do it.
+</div>
+

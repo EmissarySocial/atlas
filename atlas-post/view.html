@@ -1,3 +1,4 @@
+{{- $streamID := .StreamID -}}
 <div class="page pos-relative" style="background-color:var(--gray10);">
 
 	<div class="padding-horizontal padding-vertical-sm">
@@ -6,25 +7,23 @@
 
 	<div class="bubble">
 		<div class="md:flex-row">
-			<div class="md:width-50% text-lg">
+			<div class="md:width-50% text-lg padding-bottom-lg">
 				{{- .ContentHTML -}}
 			</div>
-			<div class="md:width-50%">
+			<div class="md:width-50% md:padding-left-lg">
+				{{- $attachments := .Attachments -}}
+				{{- if $attachments.NotEmpty -}}
+					{{- range $index, $attachment := $attachments -}}
+						<div hx-get="/{{$streamID}}/view-attachment?attachmentId={{$attachment.ID}}" class="clickable">
+							<img src="{{$attachment.URL}}" class="width-100%">
+						</div>
+					{{- end -}}
+				{{- end -}}
+			
 				{{ template "view-map" . }}
 			</div>
 		</div>
 
-		{{- $attachments := .Attachments -}}
-		{{- if $attachments.NotEmpty -}}
-			<div class="cols-4 margin-top">
-				{{- range $index, $attachment := $attachments -}}
-					<div>
-						<img src="{{$attachment.URL}}" class="width-100%">
-					</div>
-				{{- end -}}
-			</div>
-		{{- end -}}
-			
 		{{- if .UserCan "edit" -}}
 			<div class="text-xs pos-absolute-top-right">
 				<button hx-get="/{{.StreamID}}/edit">Edit</button>
@@ -44,7 +43,13 @@
 		</div>
 	</div>
 
-	<div hx-get="/{{.StreamID}}/view-replies" hx-trigger="load" hx-target="this" hx-swap="innerHTML" hx-push-url="false"></div>
+	<div 
+		hx-get="/{{.StreamID}}/view-replies" 
+		hx-trigger="load" 
+		hx-target="this" 
+		hx-swap="innerHTML" 
+		hx-push-url="false">
+	</div>
 
 </div>
 
@@ -89,3 +94,5 @@
 	}
 
 </style>
+
+<div hx-get="/{.StreamID}" hx-target="main" hx-swap="innerHTML" hx-trigger="refreshPage" hx-push-url="false"></div>
