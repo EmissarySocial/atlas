@@ -20,6 +20,14 @@ main {
 	justify-content: center;
 	container-type:inline-size;
 	overscroll-behavior: none;
+
+	&.mobile {
+
+	}
+
+	&.desktop {
+		-padding-top:32px;
+	}
 }
 
 body:has(> main > .app) {

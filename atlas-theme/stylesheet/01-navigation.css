@@ -1,6 +1,5 @@
 nav {
 	position:fixed;
-	bottom:var(--rhythm);
 	left:var(--rhythm);
 	right:var(--rhythm);
 	z-index:999;
@@ -16,6 +15,14 @@ nav {
 	box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 	padding:var(--rhythm);
 	color: var(--black);
+
+	&.mobile {
+		bottom:var(--rhythm);
+	}
+
+	&.desktop {
+		top:var(--rhythm);
+	}
 
 	.nav-item {
 		display:block;
@@ -36,5 +43,4 @@ nav {
 	#nav-search {
 		border-radius:calc(var(--rhythm) * 2);
 	}
-
 }

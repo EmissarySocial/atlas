@@ -14,6 +14,14 @@
 	width:100%;
 	margin:0px;
     background-color: var(--page-background);
+
+	.mobile & {
+
+	}
+
+	.desktop & {
+		margin-top:88px;
+	}
 }
 
 .framed {

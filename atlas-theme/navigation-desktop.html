@@ -1,5 +1,28 @@
 {{- $q := .QueryParam "q" -}}
-<nav script="install ToggleContainer on click from elsewhere trigger ToggleHide">
+<nav class="desktop" script="install ToggleContainer on click from elsewhere trigger ToggleHide">
+
+	<div class="flex-row flex-align-center">
+		<div>
+			<button class="ToggleShow circle flex-center" style="height:42px; width:42px; background-color:black; color:white;" aria-label="Show Navigation">
+				{{- if .IsAuthenticated -}}
+					{{- $userImage := .UserImage -}}
+					{{- if ne "" $userImage -}}
+						<img src="{{.UserImage}}" class="circle" style="height:42px; width:42px; object-fit:cover;">
+					{{- else -}}
+						{{icon "menu"}}
+					{{- end -}}
+				{{- else -}}
+					{{icon "menu"}}
+				{{- end -}}
+			</button>
+			<button class="ToggleHide circle" style="padding:10px; background-color:black; color:white; display:none;" aria-label="Hide Navigation">{{icon "cancel"}}</button>
+		</div>
+		<div class="flex-grow">
+			<form hx-get="/home">
+				<input id="nav-search" type="search" name="q" value="{{$q}}">
+			</form>
+		</div>
+	</div>
 
 	<div class="ToggleContent flex-column margin-bottom" style="display:none;" hx-push-url="true" hx-swap="transition:true">
 
@@ -61,29 +84,6 @@
 			</a>
 		{{- end -}}
 
-	</div>
-
-	<div class="flex-row flex-align-center">
-		<div class="flex-grow">
-			<form hx-get="/home">
-				<input id="nav-search" type="search" name="q" value="{{$q}}">
-			</form>
-		</div>
-		<div>
-			<button class="ToggleShow circle flex-center" style="height:42px; width:42px; background-color:black; color:white;" aria-label="Show Navigation">
-				{{- if .IsAuthenticated -}}
-					{{- $userImage := .UserImage -}}
-					{{- if ne "" $userImage -}}
-						<img src="{{.UserImage}}" class="circle" style="height:42px; width:42px; object-fit:cover;">
-					{{- else -}}
-						{{icon "menu"}}
-					{{- end -}}
-				{{- else -}}
-					{{icon "menu"}}
-				{{- end -}}
-			</button>
-			<button class="ToggleHide circle" style="padding:10px; background-color:black; color:white; display:none;" aria-label="Hide Navigation">{{icon "cancel"}}</button>
-		</div>
 	</div>
 
 </nav>

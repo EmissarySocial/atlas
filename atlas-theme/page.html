@@ -8,11 +8,20 @@
 
 <body hx-target="main" hx-swap="innerHTML transition:true show:window:top" hx-push-url="true" hx-ext="a11y">
 
-	{{template "navigation" . }}
+	{{- if .IsMobile -}}
 
-	<main id="main">
-		{{- .GetContent -}}
-	</main>
+		{{- template "navigation-mobile" . -}}
+		<main id="main" class="mobile">
+			{{- .GetContent -}}
+		</main>
+
+	{{- else -}}
+	
+		{{- template "navigation-desktop" . -}}
+		<main id="main" class="desktop">
+			{{- .GetContent -}}
+		</main>
+	{{- end -}}
 	
 	<aside></aside>
 
