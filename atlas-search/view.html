@@ -3,7 +3,7 @@
 {{- $lng := .QueryParam "lng" -}}
 {{- $zoom := .QueryParam "zoom" -}}
 
-<div class="app">
+<div class="app" script="init send SelectNav(id:'{{.StreamID}}')">
 	<div id="map" class="pos-absolute-four-corners"></div>
 
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
