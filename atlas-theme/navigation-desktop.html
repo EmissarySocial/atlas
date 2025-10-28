@@ -1,89 +1,78 @@
 {{- $q := .QueryParam "q" -}}
-<nav class="desktop" script="install ToggleContainer on click from elsewhere trigger ToggleHide">
 
-	<div class="flex-row flex-align-center">
-		<div>
-			<button class="ToggleShow circle flex-center" style="height:42px; width:42px; background-color:black; color:white;" aria-label="Show Navigation">
-				{{- if .IsAuthenticated -}}
-					{{- $userImage := .UserImage -}}
-					{{- if ne "" $userImage -}}
-						<img src="{{.UserImage}}" class="circle" style="height:42px; width:42px; object-fit:cover;">
-					{{- else -}}
-						{{icon "menu"}}
-					{{- end -}}
-				{{- else -}}
-					{{icon "menu"}}
-				{{- end -}}
-			</button>
-			<button class="ToggleHide circle" style="padding:10px; background-color:black; color:white; display:none;" aria-label="Hide Navigation">{{icon "cancel"}}</button>
-		</div>
-		<div class="flex-grow">
-			<form hx-get="/home">
-				<input id="nav-search" type="search" name="q" value="{{$q}}">
-			</form>
-		</div>
-	</div>
-
-	<div class="ToggleContent flex-column margin-bottom" style="display:none;" hx-push-url="true" hx-swap="transition:true">
-
-		{{- range .Navigation -}}
-			<a href="/{{.Token}}" id="nav-{{.StreamID}}" class="nav-item turboclick" aria-label="{{.Label}}">
-				{{- $icon := .Icon -}}
-				{{- if ne "" $icon -}}
-					<span class="icon selected-hide">{{icon $icon}}</span>
-					<span class="icon selected-show">{{icon (join $icon "-fill")}}</span>
-				{{- end }}
-				<span class="label">{{.Label}}</span>
-			</a>
-		{{- end -}}
-
-		<hr style="height:1px;">
-
-		{{- if .IsAuthenticated -}}
-			<a hx-get="/@me/outbox-add" id="nav-outbox-add" class="nav-item turboclick bold" aria-label="Profile">
-				<span class="icon">{{icon "plus"}}</span>
-				<span class="label">Add a Note</span>
-			</a>
-
-			<a href="/@me" id="nav-outbox" class="nav-item turboclick" aria-label="Profile">
-				<span class="icon">{{icon "user"}}</span>
-				<span class="label">My Profile</span>
-			</a>
-
-			<a href="/@me/inbox" id="nav-inbox" class="nav-item turboclick" aria-label="Inbox">
-				<span class="icon">{{icon "inbox"}}</span>
-				<span class="label">My Inbox</span>
-			</a>
-
-			<a href="/@me/settings" id="nav-settings" class="nav-item turboclick" aria-label="Settings">
-				<span class="icon">{{icon "settings"}}</span>
-				<span class="label">My Settings</span>
-			</a>
-
-			{{- if .IsOwner -}}
-				<a href="/admin/domain" id="nav-admin" class="nav-item turboclick" aria-label="Server Admin">
-					<span class="icon">{{icon "server"}}</span>
-					<span class="label">Server Settings</span>
-				</a>
-			{{- end -}}
-			
-			<a hx-post="/signout" id="nav-settings" class="nav-item turboclick" aria-label="Sign Out">
-				<span class="icon">{{icon "logout"}}</span>
-				<span class="label">Sign Out</span>
-			</a>
-
-		{{- else if .IsIdentity -}}
-			<a href="/@guest" id="nav-settings" class="nav-item turboclick" aria-label="Profile">
-				<span class="icon">{{icon "user"}}</span>
-				<span class="label">My Profile</span>
-			</a>
-		{{- else -}}
-			<a href="/signin" id="nav-signin" class="nav-item turboclick" aria-label="Sign In">
-				<span class="icon">{{icon "user"}}</span>
-				<span class="label">Sign In</span>
-			</a>
-		{{- end -}}
-
-	</div>
-
+<nav class="desktop">
+	<form hx-get="/home">
+		<input id="nav-search" type="search" name="q" value="{{$q}}" placeholder="Search this map with text and #hashtags">
+	</form>
 </nav>
+
+
+<div id="sidebar" class="flex-column margin-bottom" hx-push-url="true" hx-swap="transition:true"
+style="width:240px; padding:var(--rhythm); padding-top:88px;">
+
+	{{- range .Navigation -}}
+		<a href="/{{.Token}}" id="nav-{{.StreamID}}" class="nav-item turboclick" aria-label="{{.Label}}">
+			{{- $icon := .Icon -}}
+			{{- if ne "" $icon -}}
+				<span class="icon selected-hide">{{icon $icon}}</span>
+				<span class="icon selected-show">{{icon (join $icon "-fill")}}</span>
+			{{- end }}
+			<span class="label">{{.Label}}</span>
+		</a>
+	{{- end -}}
+
+	<br>
+
+	{{- if .IsAuthenticated -}}
+		<a hx-get="/@me/outbox-add" id="nav-outbox-add" class="nav-item turboclick link" aria-label="Profile">
+			<span class="icon">{{icon "plus"}}</span>
+			<span class="label">Add a Placemark</span>
+		</a>
+
+		<br>
+
+		<a href="/@me" id="nav-outbox" class="nav-item turboclick" aria-label="Profile">
+			<span class="icon selected-hide">{{icon "user"}}</span>
+			<span class="icon selected-show">{{icon "user-fill"}}</span>
+			<span class="label">My Profile</span>
+		</a>
+
+		<a href="/@me/inbox" id="nav-inbox" class="nav-item turboclick" aria-label="Inbox">
+			<span class="icon selected-hide">{{icon "inbox"}}</span>
+			<span class="icon selected-show">{{icon "inbox-fill"}}</span>
+			<span class="label">My Inbox</span>
+		</a>
+
+		<a href="/@me/settings" id="nav-settings" class="nav-item turboclick" aria-label="Settings">
+			<span class="icon selected-hide">{{icon "settings"}}</span>
+			<span class="icon selected-show">{{icon "settings-fill"}}</span>
+			<span class="label">My Settings</span>
+		</a>
+
+		{{- if .IsOwner -}}
+			<a href="/admin/domain" id="nav-admin" class="nav-item turboclick" aria-label="Server Admin">
+			<span class="icon selected-hide">{{icon "server"}}</span>
+			<span class="icon selected-show">{{icon "server-fill"}}</span>
+				<span class="label">Server Settings</span>
+			</a>
+		{{- end -}}
+		
+		<a hx-post="/signout" id="nav-settings" class="nav-item turboclick" aria-label="Sign Out">
+			<span class="icon">{{icon "logout"}}</span>
+			<span class="label">Sign Out</span>
+		</a>
+
+	{{- else if .IsIdentity -}}
+		<a href="/@guest" id="nav-settings" class="nav-item turboclick" aria-label="Profile">
+			<span class="icon selected-hide">{{icon "user"}}</span>
+			<span class="icon selected-show">{{icon "user-fill"}}</span>
+			<span class="label">My Profile</span>
+		</a>
+	{{- else -}}
+		<a href="/signin" id="nav-signin" class="nav-item turboclick" aria-label="Sign In">
+			<span class="icon">{{icon "user"}}</span>
+			<span class="label">Sign In</span>
+		</a>
+	{{- end -}}
+
+</div>

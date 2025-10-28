@@ -7,11 +7,14 @@
 }
 
 body {
-	display:flex;
-	flex-direction:column;
 	background-color: var(--body-background);
 	color: var(--text-color);
 	margin:0px;
+
+	&.desktop {
+		display: flex;
+		flex-direction: row;
+	}
 }
 
 main {
@@ -20,27 +23,6 @@ main {
 	justify-content: center;
 	container-type:inline-size;
 	overscroll-behavior: none;
-
-	&.mobile {
-
-	}
-
-	&.desktop {
-		-padding-top:32px;
-	}
-}
-
-body:has(> main > .app) {
-	height:100dvh;
-	width:100dvw;
-	overflow-x:hidden;
-	overflow-y:hidden;
-	overscroll-behavior: none;
-}
-
-main:has(> .app) {
-	height:100%;
-	overflow-x:hidden;
-	overflow-y:hidden;
-	overscroll-behavior:none;
+	width:100%;
+	min-height: 100%;
 }

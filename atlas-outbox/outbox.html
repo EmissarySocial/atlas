@@ -58,10 +58,8 @@
 	<div class="margin-vertical">
 
 		{{if .IsMyself -}}
-			<div class="margin-bottom">
-				<div style="max-width:600px;">
-					<button hx-get="/@{{.UserID}}/outbox-add">+ New Post</button>
-				</div>
+			<div class="padding-lg link text-lg bold align-center" hx-get="/@{{.UserID}}/outbox-add">
+				+ Add a Placemark
 			</div>
 		{{- end -}}
 

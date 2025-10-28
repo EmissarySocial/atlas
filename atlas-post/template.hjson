@@ -95,15 +95,14 @@
 			steps: [
 				{do:"as-modal", steps: [
 					{do:"set-data", defaults:{"data.deleteAfter":0}}
-					// {do:"view-html"}
+					{do:"view-html"}
 					{
 						do:edit
-						options:["submit-label:Add"]
+						options:["submit-label:Add Placemark"]
 						form: {
 							type: layout-vertical
-							label: Add a Note
 							children: [
-								{type:"text", path:"places.0.fullAddress", options:{placeholder:"Location...", required:true}}
+								{type:"place", id:"placeSelect", path:"places.0", options:{placeholder:"Location...", endpoint:"/.geosearch/options", required:true}}
 								{type:"textarea", path:"content.raw", options:{placeholder:"Your Message...", rows:6}}
 								{type:"upload", path:"iconUrl", label:"Attach Photo", options:{accept:"image/*"}}
 								{type:"select", path:"data.deleteAfter", options:{provider:"atlas-post.deleteAfter"}}
@@ -172,14 +171,14 @@
 			roles:["author"]
 			steps: [
 				{do:"as-modal", steps: [
+					{do:"view-html"}
 					{
 						do:edit
-						options:["submit-label:Update","delete:/{{.StreamID}}/delete"]
+						options:["delete:/{{.StreamID}}/delete"]
 						form: {
 							type: layout-vertical
-							label: Edit Note
 							children: [
-								{type:"text", path:"places.0.fullAddress", options:{placeholder:"Location...", required:true}}
+								{type:"place", id:"placeSelect", path:"places.0", options:{placeholder:"Location...", endpoint:"/.geosearch/options", required:true}}
 								{type:"textarea", path:"content.raw", options:{placeholder:"Your Message...", rows:6}}
 								{type:"upload", path:"iconUrl", label:"Attach a Photo", options:{accept:"image/*", delete:"/{{.StreamID}}/delete-attachment"}}
 								{type:"select", path:"data.deleteAfter", options:{provider:"atlas-post.deleteAfter"}}

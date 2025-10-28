@@ -1,3 +1,6 @@
+{{- $isMobile := .IsMobile -}}
+{{- $class := iif $isMobile "mobile" "desktop" -}}
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,21 +9,27 @@
 	{{ template "includes-head" .}}
 </head>
 
-<body hx-target="main" hx-swap="innerHTML transition:true show:window:top" hx-push-url="true" hx-ext="a11y">
+<body hx-target="main" hx-swap="innerHTML transition:true show:window:top" hx-push-url="true" hx-ext="a11y" id="body" class="{{$class}}"
+	script="
+ 		install ToggleContainer
+		install SelectNav">
 
 	{{- if .IsMobile -}}
 
 		{{- template "navigation-mobile" . -}}
-		<main id="main" class="mobile">
+
+		<main id="main">
 			{{- .GetContent -}}
 		</main>
 
 	{{- else -}}
 	
 		{{- template "navigation-desktop" . -}}
-		<main id="main" class="desktop">
+
+		<main id="main">
 			{{- .GetContent -}}
 		</main>
+		
 	{{- end -}}
 	
 	<aside></aside>

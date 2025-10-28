@@ -1,7 +1,7 @@
 {{- $streamID := .StreamID -}}
 <div class="page pos-relative" style="background-color:var(--gray10);">
 
-	<div class="padding-horizontal padding-vertical-sm">
+	<div class="padding-horizontal padding-vertical-sm show-mobile">
 		<a href="/home">&larr; Map</a>
 	</div>
 
@@ -25,7 +25,7 @@
 		</div>
 
 		{{- if .UserCan "edit" -}}
-			<div class="text-xs pos-absolute-top-right">
+			<div class="text-xs pos-absolute-top-right" style="z-index:1000">
 				<button hx-get="/{{.StreamID}}/edit">Edit</button>
 			</div>
 		{{- end -}}

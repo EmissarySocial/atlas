@@ -16,31 +16,42 @@ nav {
 	padding:var(--rhythm);
 	color: var(--black);
 
-	&.mobile {
-		bottom:var(--rhythm);
-	}
-
-	&.desktop {
-		top:var(--rhythm);
-	}
-
-	.nav-item {
-		display:block;
-		padding: var(--rhythm) calc(var(--rhythm) * 2);
-		font-size: calc(var(--rhythm) * 2);
-		line-height:1.5em;
-		border-radius: calc(var(--rhythm) * 2);
-
-		&:last-child {
-			border:none;
-		}
-
-		&:hover {
-			background-color: var(--gray20);
-		}
-	}
-
 	#nav-search {
 		border-radius:calc(var(--rhythm) * 2);
+	}
+
+	.desktop & {
+		top: var(--rhythm);
+	}
+
+	.mobile & {
+		bottom: var(--rhythm);
+	}
+}
+
+.nav-item {
+	color:var(--gray90);
+	display:block;
+	padding: var(--rhythm) calc(var(--rhythm) * 2);
+	font-size: calc(var(--rhythm) * 2);
+	line-height:1.5em;
+	border-radius: calc(var(--rhythm) * 2);
+	text-overflow: ellipsis;
+	white-space: nowrap;
+
+	&:last-child {
+		border:none;
+	}
+
+	&:hover {
+		background-color: var(--gray20);
+	}
+
+	&.selected {
+		font-weight:bold;
+	}
+
+	&.link {
+		color:var(--link-color);
 	}
 }

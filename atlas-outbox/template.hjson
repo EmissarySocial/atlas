@@ -41,7 +41,7 @@
 					style: inline
 					location: outbox
 					template: atlas-post
-					title: + Add a Post
+					title: + Add a Placemark
 					set-permissions: {copy:true, editor:["self"]}
 				}
 				{do:"set-data", values:{"data.show-events":"true"}}
