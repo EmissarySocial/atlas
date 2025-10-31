@@ -18,22 +18,7 @@
 	<script>
 		var map = L.map('map')
 
-		showResults();
-
-		async function showResults() {
-			showMap();
-
-			var data = await fetch("/{{.StreamID}}/view-results?q={{queryEscape $q}}")
-			var items = await data.json()
-
-			for (item of items) {
-				var coordinates = item.place.location.coordinates
-				latLng = L.latLng(coordinates[1], coordinates[0])
-
-				var marker = L.marker(latLng).addTo(map);
-				marker.bindPopup(item.summary + "<br><br><a href='" + item.url + "' class='bold'>View &rarr;</a>");
-			}
-		}
+		showMap();
 
 		async function showMap() {
 
@@ -48,16 +33,54 @@
 				attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 			}).addTo(map);
 
-			map.on("zoomend", saveLocation)
-			map.on("moveend", saveLocation)
+			map.on("zoomend", setLocation)
+			map.on("moveend", setLocation)
+
+			showResults()
 		}
 
-		function saveLocation() {
+		function setLocation() {
 			var zoom = map.getZoom()
 			var latLng = map.getCenter()
 			localStorage.setItem("latitude", latLng.lat);
 			localStorage.setItem("longitude", latLng.lng);
 			localStorage.setItem("zoom", zoom);
+
+			showResults()
+		}
+
+		async function showResults() {
+
+			// get bounding box for the map area
+			var bounds = map.getBounds()
+			var north = bounds._northEast.lat
+			var east = bounds._northEast.lng
+			var south = bounds._southWest.lat
+			var west = bounds._southWest.lng
+			var polygon = [
+				west, north,
+				east, north,
+				east, south,
+				west, south,
+				west, north, // close the polygon
+			].join(",")
+
+			var data = await fetch("/{{.StreamID}}/view-results?q={{queryEscape $q}}&place=" + polygon)
+			var items = await data.json()
+
+			for (item of items) {
+				var coordinates = item.place.location.coordinates
+				latLng = L.latLng(coordinates[1], coordinates[0])
+
+				var marker = L.marker(latLng).addTo(map);
+
+				if (item.iconUrl != "") {
+					item.summary = "<img src='" + item.iconUrl +"' class='width-100% block margin-bottom'>" + item.summary
+				}
+
+				item.summary = "<a href='" + item.url + "' class='block text-plain text-nocolor width-320'>" + item.summary + "<br><br><div class=link>View &rarr;</div></a>"
+				marker.bindPopup(item.summary);
+			}
 		}
 
 		async function getSavedLocation() {
