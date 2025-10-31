@@ -34,7 +34,7 @@ Here's what we're working on for future versions of this app:
 Check out the current project status on the [Atlas Project Kanban &nearr;](https://github.com/orgs/EmissarySocial/projects/3) for an updated list of what we're building.
 
 ## Contribute
-We're looking for more volunteers who can [contribute to this project &nearr;](https://github.com/EmissarySocial/wiki/Contribute) in any capacity.  So please help us make this app the very best it can be.
+We're looking for more volunteers who can [contribute to this project &nearr;](https://github.com/EmissarySocial/atlas/wiki/Contribute) in any capacity.  So please help us make this app the very best it can be.
 
 ## Open Source
 Atlas is an open source project (GNU-AGPL licensed). All source code is [available on GitHub &nearr;](https://github.com/EmissarySocial/atlas).
