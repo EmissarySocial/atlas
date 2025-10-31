@@ -31,8 +31,8 @@
 		}
 	}
 	startupStreams: [
-		{templateId:"atlas-search", token:"home", label:"About Atlas", icon:"home", rank:1}
-		{templateId:"article-markdown", token:"about", label:"About Atlas", icon:"info", rank:2}
+		{templateId:"atlas-search", token:"home", label:"Map", icon:"map", stateId:"published", publishDate:0, rank:1}
+		{templateId:"article-markdown", token:"about", label:"About", icon:"info", stateId:"published", publishDate:0, rank:2}
 	]
 	startupGroups:[
 		{label:"Publishers"}

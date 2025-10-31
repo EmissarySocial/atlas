@@ -14,6 +14,8 @@ body {
 	&.desktop {
 		display: flex;
 		flex-direction: row;
+		padding-top:88px;
+		padding-right:var(--rhythm);
 	}
 }
 

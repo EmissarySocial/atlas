@@ -15,10 +15,6 @@
 	width:100%;
 	margin:0px;
     background-color: var(--page-background);
-
-	.desktop & {
-		margin-top:88px;
-	}
 }
 
 /******************************************

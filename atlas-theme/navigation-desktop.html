@@ -6,9 +6,8 @@
 	</form>
 </nav>
 
-
 <div id="sidebar" class="flex-column margin-bottom" hx-push-url="true" hx-swap="transition:true"
-style="width:240px; padding:var(--rhythm); padding-top:88px;">
+style="width:240px; padding:var(--rhythm);">
 
 	{{- range .Navigation -}}
 		<a href="/{{.Token}}" id="nav-{{.StreamID}}" class="nav-item turboclick" aria-label="{{.Label}}">
