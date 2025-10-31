@@ -1,0 +1,56 @@
+{{- $pageMax := 1 -}}
+{{- $after := .QueryParam "after" -}}
+{{- $replies := .RepliesAfter $after $pageMax -}}
+
+{{- if $replies.NotEmpty -}}
+
+	{{- $lastPublished := 0 -}}
+
+	{{- range $index, $reply := $replies -}}
+		{{- $object := $reply.Object -}}
+		{{- $url := $object.GetString "url" -}}
+
+		<div class="bubble flex-row">
+			<div class="flex-grow">
+				<div>{{$object.GetString "name"}}</div>
+				<div>{{$object.GetString "content" | html}}</div>
+			</div>
+			<div>
+				<a href="{{$url}}" target="_blank" class="button text-sm">{{icon "globe"}}</a>
+			</div>
+		</div>
+
+		{{- $attributedTo := $object.GetMap "attributedTo" -}}
+		{{- $profileURL := $attributedTo.GetString "url" -}}
+		{{- $name := $attributedTo.GetString "name" -}}
+		{{- $icon := $attributedTo.GetMap "icon" -}}
+		{{- $iconURL := $icon.GetString "href" -}}
+		{{- $publishedDate := $object.GetTime "published" -}}
+		{{- $lastPublished = $publishedDate.Unix -}}
+
+		<div class="flex-row margin-bottom-lg">
+			<div>
+				<img src="{{$iconURL}}" class="width-48 circle">
+			</div>
+			<div>
+				<div class="bold">
+					<a href="{{$profileURL}}">{{$name}}</a>
+				</div>
+				<div class="text-gray">{{$publishedDate | tinyDate}}</div>
+			</div>
+		</div>
+	{{- end -}}
+
+	{{- if $replies.IsLength $pageMax -}}
+		<div 
+			hx-get="/{{.StreamID}}/view-replies-list?after={{$lastPublished}}"
+			hx-target="this"
+			hx-trigger="revealed"
+			hx-swap="innerHTML"
+			hx-push-url="false">
+		</div>
+	{{- end -}}
+
+{{- else if eq $after "" -}}
+	<div>There are no replies to this Placemark</div>
+{{- end -}}
