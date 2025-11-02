@@ -31,14 +31,14 @@
 	</div>
 
 	<div class="margin-vertical align-center pos-relative">
-		{{- if .IsMyself -}}
-			<div class="pos-absolute-top-right">
-				<button hx-get="/@me/edit" class="text-xs">Edit</button>
-			</div>
-		{{- end -}}
 		
 		<h1 class="p-name margin-none text-lg bold align-center">{{.DisplayName}}</h1>
-		<div script="install SelectText" class="text-sm gray50 ellipsis align-center">@{{.Username}}@{{.Hostname}}</div>
+		<div class="text-sm gray50 ellipsis align-center">
+			<span script="install SelectText">@{{.Username}}@{{.Hostname}}</span>
+			{{- if .IsMyself -}}
+				<button hx-get="/@me/edit" class="text-xs margin-left">Edit</button>
+			{{- end -}}
+		</div>
 
 		<div class="margin-top">
 			<span class="p-note">{{.StatusMessage}}</span>

@@ -14,14 +14,14 @@
 			</a>
 		{{- end -}}
 
-		<hr style="height:1px;">
+		<br>
 
 		{{- if .IsAuthenticated -}}
-			<a hx-get="/@me/outbox-add" id="nav-outbox-add" class="nav-item turboclick bold" aria-label="Profile">
+			<a hx-get="/@me/outbox-add" id="nav-outbox-add" class="nav-item turboclick link" aria-label="Profile">
 				<span class="icon">{{icon "plus"}}</span>
-				<span class="label">Add a Note</span>
+				<span class="label">Add a Placemark</span>
 			</a>
-
+			<br>
 			<a href="/@me" id="nav-outbox" class="nav-item turboclick" aria-label="Profile">
 				<span class="icon">{{icon "user"}}</span>
 				<span class="label">My Profile</span>
