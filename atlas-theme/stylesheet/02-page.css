@@ -45,11 +45,9 @@
 @media screen and (min-width:1024px) {
 
 	.page {
-		width:90%;
-		max-width:1100px;
-		margin-top:24px;
+		border:solid 1px var(--gray20);
 		margin-bottom: 64px;
-		padding: calc(var(--rhythm) * 1.5);
+		padding: calc(var(--rhythm) * 2) calc(var(--rhythm) * 4);
 	}
 
 	.framed {
