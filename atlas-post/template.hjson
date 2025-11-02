@@ -177,6 +177,18 @@
 			]
 		}
 
+		view-qrcode: {
+			role:["author"]
+			stateRoles: {
+				published: ["viewer"]
+			}
+			steps: [
+				{do:"as-modal", steps:[
+					{do:"view-html"}
+				]}
+			]
+		}
+
 		edit: {
 			roles:["author"]
 			steps: [

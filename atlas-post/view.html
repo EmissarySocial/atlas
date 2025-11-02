@@ -75,6 +75,11 @@
 						<button hx-get="/@{{.AttributedTo.UserID.Hex}}/intent?intent=follow&object={{.Permalink}}" class="outline">Follow Me</button>
 					{{- end -}}
 
+					<button hx-get="/{{.StreamID}}/view-qrcode" class="outline">
+						{{icon "qr-code"}}
+						<span class="show-desktop">QR Code</span>
+					</button>
+
 				</div>
 
 				{{- if not .IsAuthenticated -}}
