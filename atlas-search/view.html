@@ -17,6 +17,7 @@
 
 	<script>
 		var map = L.map('map')
+		var markerGroup = L.featureGroup().addTo(map)
 
 		showMap();
 
@@ -69,11 +70,13 @@
 			var data = await fetch("/{{.StreamID}}/view-results?q={{queryEscape $q}}&place=" + polygon)
 			var items = await data.json()
 
+			markerGroup.clearLayers();
+
 			for (item of items) {
 				var coordinates = item.place.location.coordinates
 				latLng = L.latLng(coordinates[1], coordinates[0])
 
-				var marker = L.marker(latLng).addTo(map);
+				var marker = L.marker(latLng).addTo(markerGroup);
 
 				if (item.iconUrl != "") {
 					item.summary = "<img src='" + item.iconUrl +"' class='width-100% block margin-bottom'>" + item.summary
