@@ -12,7 +12,7 @@
 			{{- if $attachments.NotEmpty -}}
 				{{- range $index, $attachment := $attachments -}}
 					<div hx-get="/{{$streamID}}/view-attachment?attachmentId={{$attachment.ID}}" class="clickable">
-						<img src="{{$attachment.URL}}" class="width-100%">
+						<img src="{{$attachment.URL}}" class="rounded width-100%">
 					</div>
 				{{- end -}}
 			{{- end -}}
@@ -85,6 +85,10 @@
 						<!--button hx-get="/@{{.AttributedTo.UserID.Hex}}/intent?intent=follow&object={{.Permalink}}" class="outline">Follow Me</button-->
 					{{- end -}}
 
+					<button class="outline">
+						{{icon "share"}}
+						<span class="show-desktop">Share</span>
+					</button>
 					<button hx-get="/{{.StreamID}}/view-qrcode" class="outline">
 						{{icon "qr-code"}}
 						<span class="show-desktop">QR Code</span>
@@ -129,7 +133,7 @@
 		background-color: var(--white);
 		border: 1px solid var(--gray30);
 		border-radius: calc(var(--rhythm) * 2);
-		padding: calc(var(--rhythm) * 4);
+		padding: calc(var(--rhythm) * 2);
 	}
 
 	div.bubble:before,
