@@ -50,29 +50,39 @@
 			{{- end -}}
 		</div>
 
-		<div class="flex-row clickable" script="install blockselect()">
-			<div>
-				<img src="{{.AttributedTo.IconURL}}" class="width-48 circle">
-			</div>
-			<div class="flex-grow">
-				<div class="bold">
-					<a href="{{.AttributedTo.ProfileURL}}">{{.AttributedTo.Name}}</a>
+		<div class="flex-row">
+			<div class="flex-row flex-grow clickable" script="install blockselect()">
+				<div>
+					<img src="{{.AttributedTo.IconURL}}" class="width-48 circle">
 				</div>
-				<div class="text-gray">{{.PublishDate | tinyDate}}</div>
+				<div class="flex-grow">
+					<div class="bold">
+						<a href="{{.AttributedTo.ProfileURL}}">{{.AttributedTo.Name}}</a>
+					</div>
+					<div class="text-gray">{{.PublishDate | tinyDate}}</div>
+				</div>
 			</div>
 			<div>
 				<div>
 					{{- if .IsAuthenticated -}}
 						{{- $following := .AmFollowing .Permalink -}}
-							<button class="primary" hx-get="/@me/inbox/browse-reply?url={{.Permalink}}">{{icon "chat"}} Reply</button>
+							<button class="primary" hx-get="/@me/inbox/browse-reply?url={{.Permalink}}">
+								{{icon "chat"}}
+								<span class="show-desktop">Reply</span>
+							</button>
+						<!--
 						{{- if $following.IsNew -}}
 							<button hx-get="/@me/settings/following-edit?url={{.Permalink}}" class="outline">Follow Me</button>
 						{{- else -}}
 							<button hx-get="/@me/settings/following-edit?url={{.Permalink}}" class="outline">{{icon "check"}} Following</button>
 						{{- end -}}
+						-->
 					{{- else -}}
-						<button class="primary" hx-get="/{{.StreamID}}/intent?intent=reply&object={{.Permalink}}">{{icon "chat"}} Reply</button>
-						<button hx-get="/@{{.AttributedTo.UserID.Hex}}/intent?intent=follow&object={{.Permalink}}" class="outline">Follow Me</button>
+						<button class="primary" hx-get="/{{.StreamID}}/intent?intent=reply&object={{.Permalink}}">
+							{{icon "chat"}}
+							<span class="show-desktop">Reply</span>
+						</button>
+						<!--button hx-get="/@{{.AttributedTo.UserID.Hex}}/intent?intent=follow&object={{.Permalink}}" class="outline">Follow Me</button-->
 					{{- end -}}
 
 					<button hx-get="/{{.StreamID}}/view-qrcode" class="outline">
