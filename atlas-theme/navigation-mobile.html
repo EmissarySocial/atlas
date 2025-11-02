@@ -27,12 +27,12 @@
 				<span class="label">My Profile</span>
 			</a>
 
-			<a href="/@me/inbox" id="nav-inbox" class="nav-item turboclick" aria-label="Inbox">
+			<a href="/@me/inbox/mobile" id="nav-inbox" class="nav-item turboclick" aria-label="Inbox">
 				<span class="icon">{{icon "inbox"}}</span>
 				<span class="label">My Inbox</span>
 			</a>
 
-			<a href="/@me/settings" id="nav-settings" class="nav-item turboclick" aria-label="Settings">
+			<a href="/@me/settings/mobile" id="nav-settings" class="nav-item turboclick" aria-label="Settings">
 				<span class="icon">{{icon "settings"}}</span>
 				<span class="label">My Settings</span>
 			</a>
@@ -44,11 +44,6 @@
 				</a>
 			{{- end -}}
 			
-			<a hx-post="/signout" id="nav-settings" class="nav-item turboclick" aria-label="Sign Out">
-				<span class="icon">{{icon "logout"}}</span>
-				<span class="label">Sign Out</span>
-			</a>
-
 		{{- else if .IsIdentity -}}
 			<a href="/@guest" id="nav-settings" class="nav-item turboclick" aria-label="Profile">
 				<span class="icon">{{icon "user"}}</span>

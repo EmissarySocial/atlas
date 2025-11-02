@@ -56,11 +56,6 @@ style="width:240px; padding:var(--rhythm);">
 			</a>
 		{{- end -}}
 		
-		<a hx-post="/signout" id="nav-settings" class="nav-item turboclick" aria-label="Sign Out">
-			<span class="icon">{{icon "logout"}}</span>
-			<span class="label">Sign Out</span>
-		</a>
-
 	{{- else if .IsIdentity -}}
 		<a href="/@guest" id="nav-settings" class="nav-item turboclick" aria-label="Profile">
 			<span class="icon selected-hide">{{icon "user"}}</span>
