@@ -39,11 +39,6 @@
 		
 		<h1 class="p-name margin-none text-lg bold align-center">{{.DisplayName}}</h1>
 		<div script="install SelectText" class="text-sm gray50 ellipsis align-center">@{{.Username}}@{{.Hostname}}</div>
-		{{- if not .Myself -}}
-			<div class="margin-top">
-				<button type="button" class="primary width-100% ellipsis" hx-get="/@{{.UserID}}/intent?intent=follow&object={{.Permalink}}">{{icon "add-circle"}} Follow {{.DisplayName}}</button>
-			</div>
-		{{- end -}}
 
 		<div class="margin-top">
 			<span class="p-note">{{.StatusMessage}}</span>
@@ -55,11 +50,24 @@
 
 	</div>
 
-	<div class="margin-vertical">
+	<div class="margin-vertical-lg">
 
 		{{if .IsMyself -}}
 			<div class="padding-lg link text-lg bold align-center" hx-get="/@{{.UserID}}/outbox-add">
 				+ Add a Placemark
+			</div>
+		{{- else -}}
+			<div class="align-center">
+				{{- if .IsAuthenticated -}}
+					{{- $following := .AmFollowing .Permalink -}}
+					{{- if $following.IsNew -}}
+						<button hx-get="/@me/settings/following-edit?url={{.Permalink}}" class="primary">{{icon "fediverse"}} Follow {{.DisplayName}}</button>
+					{{- else -}}
+						<button hx-get="/@me/settings/following-edit?url={{.Permalink}}" class="primary">{{icon "check"}} Following</button>
+					{{- end -}}
+				{{- else -}}
+					<button hx-get="/@{{.UserID}}/intent?intent=follow&object={{.Permalink}}" class="primary">{{icon "fediverse"}} Follow {{.DisplayName}}</button>
+				{{- end -}}
 			</div>
 		{{- end -}}
 

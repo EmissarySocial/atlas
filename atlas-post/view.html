@@ -1,55 +1,101 @@
 {{- $streamID := .StreamID -}}
-<div class="page pos-relative" style="background-color:var(--gray10);">
+<div class="pos-relative flex-grow">
 
-	<div class="padding-horizontal padding-vertical-sm show-mobile">
-		<a href="/home">&larr; Map</a>
-	</div>
+	<div style="max-width:600px;">
 
-	<div class="bubble">
-		<div class="md:flex-row">
-			<div class="md:width-50% text-lg padding-bottom-lg">
+		<div class="padding-horizontal padding-vertical-sm show-mobile">
+			<a href="/home">&larr; Map</a>
+		</div>
+
+		<div class="bubble">
+			{{- $attachments := .Attachments -}}
+			{{- if $attachments.NotEmpty -}}
+				{{- range $index, $attachment := $attachments -}}
+					<div hx-get="/{{$streamID}}/view-attachment?attachmentId={{$attachment.ID}}" class="clickable">
+						<img src="{{$attachment.URL}}" class="width-100%">
+					</div>
+				{{- end -}}
+			{{- end -}}
+		
+			{{- $place := .Places.First -}}
+			{{- if $place.HasAddress -}}
+				<div class="md:flex-row margin-vertical-lg" script="install blockselect(link:#maplink)">
+					<div class="md:width-20%">
+						{{ template "view-map" $place }}
+					</div>
+					<div class="h-adr md:width-80% text-sm text-gray">
+						<div class="p-street-address">{{$place.Street1}}</div>
+						<div class="p-extended-address">{{$place.Street2}}</div>
+						<div>
+							<span class="p-locality">{{$place.Locality}}</span>
+							<span class="p-region">{{$place.Region}}</span>
+							<span class="p-postal-code">{{$place.PostalCode}}</span>
+						</div>
+						<div class="p-country-name">{{$place.Country}}</div>
+						<data class="p-latitude" value="{{$place.Latitude}}"></data>
+						<data class="p-longitude" value="{{$place.Longitude}}"></data>
+						<a id="maplink" href="/home?latitude={{$place.Latitude}}&longitude={{$place.Longitude}}">Nearby Placemarks &rarr;</a>
+					</div>
+				</div>
+			{{- end -}}
+
+			<div class="text-lg">
 				{{- .ContentHTML -}}
 			</div>
-			<div class="md:width-50% md:padding-left-lg">
-				{{- $attachments := .Attachments -}}
-				{{- if $attachments.NotEmpty -}}
-					{{- range $index, $attachment := $attachments -}}
-						<div hx-get="/{{$streamID}}/view-attachment?attachmentId={{$attachment.ID}}" class="clickable">
-							<img src="{{$attachment.URL}}" class="width-100%">
-						</div>
+
+			{{- if .UserCan "edit" -}}
+				<div class="text-xs pos-absolute-top-right" style="z-index:1000">
+					<button hx-get="/{{.StreamID}}/edit">Edit</button>
+				</div>
+			{{- end -}}
+		</div>
+
+		<div class="flex-row clickable" script="install blockselect()">
+			<div>
+				<img src="{{.AttributedTo.IconURL}}" class="width-48 circle">
+			</div>
+			<div class="flex-grow">
+				<div class="bold">
+					<a href="{{.AttributedTo.ProfileURL}}">{{.AttributedTo.Name}}</a>
+				</div>
+				<div class="text-gray">{{.PublishDate | tinyDate}}</div>
+			</div>
+			<div>
+				<div>
+					{{- if .IsAuthenticated -}}
+						{{- $following := .AmFollowing .Permalink -}}
+							<button class="primary" hx-get="/@me/inbox/browse-reply?url={{.Permalink}}">{{icon "chat"}} Reply</button>
+						{{- if $following.IsNew -}}
+							<button hx-get="/@me/settings/following-edit?url={{.Permalink}}" class="outline">Follow Me</button>
+						{{- else -}}
+							<button hx-get="/@me/settings/following-edit?url={{.Permalink}}" class="outline">{{icon "check"}} Following</button>
+						{{- end -}}
+					{{- else -}}
+						<button class="primary" hx-get="/{{.StreamID}}/intent?intent=reply&object={{.Permalink}}">{{icon "chat"}} Reply</button>
+						<button hx-get="/@{{.AttributedTo.UserID.Hex}}/intent?intent=follow&object={{.Permalink}}" class="outline">Follow Me</button>
 					{{- end -}}
+
+				</div>
+
+				{{- if not .IsAuthenticated -}}
+					<div class="margin-top-sm text-xs text-light-gray">
+						<span hx-get="/{{.StreamID}}/intent" class="clickable intentMarker-account">&nbsp;</span>
+					</div>
 				{{- end -}}
-			
-				{{ template "view-map" . }}
 			</div>
 		</div>
 
-		{{- if .UserCan "edit" -}}
-			<div class="text-xs pos-absolute-top-right" style="z-index:1000">
-				<button hx-get="/{{.StreamID}}/edit">Edit</button>
-			</div>
-		{{- end -}}
+		<div 
+			hx-get="/{{.StreamID}}/view-replies" 
+			hx-trigger="load" 
+			hx-target="this" 
+			hx-swap="innerHTML" 
+			hx-push-url="false">
+		</div>
+
 	</div>
 
-	<div class="flex-row">
-		<div>
-			<img src="{{.AttributedTo.IconURL}}" class="width-48 circle">
-		</div>
-		<div>
-			<div class="bold">
-				<a href="{{.AttributedTo.ProfileURL}}">{{.AttributedTo.Name}}</a>
-			</div>
-			<div class="text-gray">{{.PublishDate | tinyDate}}</div>
-		</div>
-	</div>
-
-	<div 
-		hx-get="/{{.StreamID}}/view-replies" 
-		hx-trigger="load" 
-		hx-target="this" 
-		hx-swap="innerHTML" 
-		hx-push-url="false">
-	</div>
+	<div hx-get="/{{.StreamID}}" hx-target="main" hx-swap="innerHTML" hx-trigger="refreshPage" hx-push-url="false"></div>
 
 </div>
 
@@ -68,7 +114,7 @@
 		background-color: var(--white);
 		border: 1px solid var(--gray30);
 		border-radius: calc(var(--rhythm) * 2);
-		padding: 16px 32px;
+		padding: calc(var(--rhythm) * 4);
 	}
 
 	div.bubble:before,
@@ -94,5 +140,3 @@
 	}
 
 </style>
-
-<div hx-get="/{{.StreamID}}" hx-target="main" hx-swap="innerHTML" hx-trigger="refreshPage" hx-push-url="false"></div>

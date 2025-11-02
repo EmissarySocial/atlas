@@ -1,8 +1,3 @@
-<div role="tablist" class="pills margin-top-lg">
-	<div role="tab" aria-selected="true">Replies</div>
-	<div role="tab" hx-get="/{{.StreamID}}/view-nearby" hx-swap="innerHTML scroll:none show:none">Nearby</div>
-</div>
-
 <div class="margin-vertical-lg">
 	{{- template "view-replies-list" . -}}
 </div>

@@ -8,22 +8,37 @@
 	{{- range $index, $stream := $outbox -}}
 		{{- $document := $outboxBuilder.ActivityStream $stream.URL -}}
 		<hr>
-		<div class="hover-trigger flex-row padding">
-			<div script="on click go to url '/{{$stream.ID}}'" role="link" class="flex-grow-1 flex-row h-entry margin-bottom turboclick">
-				<div class="flex-grow-1" style="max-width:600px;">
-					{{- if ne "" $stream.Label -}}
-						<div class="h-name bold text-black">{{$stream.Label}}</div>
-					{{- end -}}
-					<div class="h-summary text-black">{{$stream.ContentHTML | html }}</div>
-					{{- if ne $stream.IconURL ""}}
-						<div style="margin-top:var(--rhythm);">
-							<img src="{{$stream.IconURL}}" loading="lazy" style="border:solid 1px var(--gray40); border-radius:16px; max-width:100%; object-fit:contain;">
+		<a href="/{{$stream.ID}}" class="block text-plain text-nocolor hover-trigger padding margin-bottom h-entry turboclick">
+			<div class="margin-horizontal-auto" style="max-width:600px;">
+				{{- if ne "" $stream.Name -}}
+					<div class="h-name bold text-black">{{$stream.Name}}</div>
+				{{- end -}}
+				{{- if ne $stream.IconURL ""}}
+					<div style="margin-top:var(--rhythm);">
+						<img src="{{$stream.IconURL}}" loading="lazy" class="u-photo rounded" style="border:solid 1px var(--gray40); max-width:100%; object-fit:contain;">
+					</div>
+				{{- end -}}
+
+				{{- $place := .Places.First -}}
+				{{- if $place.HasAddress -}}
+					<div class="h-adr margin-top margin-bottom-lg text-sm text-gray italics">
+						<div class="p-street-address">{{$place.Street1}}</div>
+						<div class="p-extended-address">{{$place.Street2}}</div>
+						<div>
+							<span class="p-locality">{{$place.Locality}}</span>
+							<span class="p-region">{{$place.Region}}</span>
+							<span class="p-postal-code">{{$place.PostalCode}}</span>
 						</div>
-					{{- end -}}
-					<div class="text-sm text-light-gray p-published">{{$stream.PublishDate | humanizeTime}}</div>
-				</div>
+						<div class="p-country-name">{{$place.Country}}</div>
+						<data class="p-latitude" value="{{$place.Latitude}}"></data>
+						<data class="p-longitude" value="{{$place.Longitude}}"></data>
+					</div>
+				{{- end -}}
+
+				<div class="h-summary text-black">{{$stream.ContentHTML | html }}</div>
+				<div class="text-sm text-light-gray p-published">{{$stream.PublishDate | humanizeTime}}</div>
 			</div>
-		</div>
+		</a>
 	{{- end -}}
 
 	<div hx-get="{{$outboxBuilder.ProfileURL}}/outbox-list?publishDate=LT:{{$last.PublishDate}}" hx-push-url="false" hx-trigger="intersect once" hx-target="this" hx-swap="outerHTML">

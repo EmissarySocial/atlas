@@ -85,9 +85,34 @@
 
 		async function getSavedLocation() {
 
+			// 1. Look for lat/lng set in the URL querystring
+			var queryString = window.location.search;
+
+			if (queryString != "") {
+				var queryParams = new URLSearchParams(queryString);
+
+				var latitudeString = queryParams.get("latitude")
+				var longitudeString = queryParams.get("longitude")
+
+				var latitude = parseFloat(latitudeString)
+				var longitude = parseFloat(longitudeString)
+				
+				if ((latitude != NaN) && (longitude != NaN)) {
+					localStorage.setItem("latitude", latitude)
+					localStorage.setItem("longitude", longitude)
+					
+					return {
+						latitude: latitude,
+						longitude: longitude,
+						zoom: getStoredZoom()
+					}
+				}
+			}
+
+			// 2. Look for lat/lng in the localStorage
 			var storedLatitude = localStorage.getItem("latitude");
 			var storedLongitude = localStorage.getItem("longitude");
-			var storedZoom = localStorage.getItem("zoom") || 13;
+			var storedZoom = getStoredZoom()
 
 			// If the user already has a saved location, then use that
 			if ((storedLatitude != null) && (storedLongitude != null)) {
@@ -98,12 +123,22 @@
 				};
 			}
 
-			// Find the user's location based on their IP address
+			// 3. Look for the user's APPROXIMATE location based on their IP address
 			var response = await fetch("/.geocode/ip");
 			var result = await response.json();
-			result.zoom = 17;
+			result.zoom = getStoredZoom();
 
 			return result;
+		}
+
+		function getStoredZoom() {
+			result = parseInt(localStorage.getItem("zoom"))
+
+			if (result != NaN) {
+				return result
+			}
+
+			return 13
 		}
 
 	</script>
