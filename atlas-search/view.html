@@ -5,6 +5,10 @@
 
 <div class="app" script="init send SelectNav(id:'{{.StreamID}}')">
 	<div id="map" class="pos-absolute-four-corners"></div>
+	<div class="pos-absolute-top-left text-sm" style="z-index:1000;">
+		<button class="primary">Follow This Map</button>
+		<button>{{icon "qr-code"}} Share</button>
+	</div>
 
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 		integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="

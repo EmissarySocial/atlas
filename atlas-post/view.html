@@ -1,4 +1,46 @@
-{{- $streamID := .StreamID -}}
+
+<style>
+	#map {
+		width:100%;
+		aspect-ratio:1;
+		background-color:#eee;
+	}
+
+	/* Adapted From: https://codepen.io/JoeHastings/pen/gPrPMo */
+	div.bubble {
+		position: relative;
+		text-align: left;
+		margin-bottom: 24px;
+		background-color: var(--white);
+		border: 1px solid var(--gray30);
+		border-radius: calc(var(--rhythm) * 2);
+		padding: calc(var(--rhythm) * 2);
+	}
+
+	div.bubble-with-arrow:before,
+	div.bubble-with-arrow:after {
+		content: ' ';
+		position: absolute;
+		width: 0;
+		height: 0;
+	}
+
+	div.bubble-with-arrow:before {
+		left: 24px;
+		bottom: -20px;
+		border: 10px solid;
+		border-color: var(--gray30) transparent transparent var(--gray30);
+	}
+
+	div.bubble-with-arrow:after {
+		left: 26px;
+		bottom: -16px;
+		border: 8px solid;
+		border-color: var(--white) transparent transparent var(--white);
+	}
+
+</style>
+
 <div class="pos-relative flex-grow">
 
 	<div style="max-width:600px;">
@@ -7,12 +49,13 @@
 			<a href="/home">&larr; Map</a>
 		</div>
 
-		<div class="bubble">
+		<div class="bubble bubble-with-arrow">
+			{{- $streamID := .StreamID -}}
 			{{- $attachments := .Attachments -}}
 			{{- if $attachments.NotEmpty -}}
 				{{- range $index, $attachment := $attachments -}}
 					<div hx-get="/{{$streamID}}/view-attachment?attachmentId={{$attachment.ID}}" class="clickable">
-						<img src="{{$attachment.URL}}" class="rounded width-100%">
+						<img src="{{$attachment.URL}}" class="rounded width-100%" style="background:var(--gray50);">
 					</div>
 				{{- end -}}
 			{{- end -}}
@@ -79,54 +122,11 @@
 			hx-get="/{{.StreamID}}/view-replies" 
 			hx-trigger="load" 
 			hx-target="this" 
-			hx-swap="innerHTML" 
+			hx-swap="outerHTML" 
 			hx-push-url="false">
+			<span class="spin">{{icon "loading"}}</span> Loading Replies
 		</div>
 
 	</div>
 
-	<div hx-get="/{{.StreamID}}" hx-target="main" hx-swap="innerHTML" hx-trigger="refreshPage" hx-push-url="false"></div>
-
 </div>
-
-<style>
-	#map {
-		width:100%;
-		aspect-ratio:1;
-		background-color:#eee;
-	}
-
-	/* Adapted From: https://codepen.io/JoeHastings/pen/gPrPMo */
-	div.bubble {
-		position: relative;
-		text-align: left;
-		margin-bottom: 24px;
-		background-color: var(--white);
-		border: 1px solid var(--gray30);
-		border-radius: calc(var(--rhythm) * 2);
-		padding: calc(var(--rhythm) * 2);
-	}
-
-	div.bubble:before,
-	div.bubble:after {
-		content: ' ';
-		position: absolute;
-		width: 0;
-		height: 0;
-	}
-
-	div.bubble:before {
-		left: 24px;
-		bottom: -20px;
-		border: 10px solid;
-		border-color: var(--gray30) transparent transparent var(--gray30);
-	}
-
-	div.bubble:after {
-		left: 26px;
-		bottom: -16px;
-		border: 8px solid;
-		border-color: var(--white) transparent transparent var(--white);
-	}
-
-</style>
