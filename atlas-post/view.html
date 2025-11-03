@@ -63,37 +63,8 @@
 				</div>
 			</div>
 			<div>
-				<div>
-					{{- if .IsAuthenticated -}}
-						{{- $following := .AmFollowing .Permalink -}}
-							<button class="primary" hx-get="/@me/inbox/browse-reply?url={{.Permalink}}">
-								{{icon "chat"}}
-								<span class="show-desktop">Reply</span>
-							</button>
-						<!--
-						{{- if $following.IsNew -}}
-							<button hx-get="/@me/settings/following-edit?url={{.Permalink}}" class="outline">Follow Me</button>
-						{{- else -}}
-							<button hx-get="/@me/settings/following-edit?url={{.Permalink}}" class="outline">{{icon "check"}} Following</button>
-						{{- end -}}
-						-->
-					{{- else -}}
-						<button class="primary" hx-get="/{{.StreamID}}/intent?intent=reply&object={{.Permalink}}">
-							{{icon "chat"}}
-							<span class="show-desktop">Reply</span>
-						</button>
-						<!--button hx-get="/@{{.AttributedTo.UserID.Hex}}/intent?intent=follow&object={{.Permalink}}" class="outline">Follow Me</button-->
-					{{- end -}}
-
-					<button class="outline">
-						{{icon "share"}}
-						<span class="show-desktop">Share</span>
-					</button>
-					<button hx-get="/{{.StreamID}}/view-qrcode" class="outline">
-						{{icon "qr-code"}}
-						<span class="show-desktop">QR Code</span>
-					</button>
-
+				<div class="text-sm">
+					{{.View "btn-social-outline"}}
 				</div>
 
 				{{- if not .IsAuthenticated -}}
