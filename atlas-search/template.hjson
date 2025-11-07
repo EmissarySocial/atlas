@@ -151,6 +151,14 @@
 				{do:"view-html"}
 			]
 		}
+		view-qrcode: {
+			roles:["anonymous"]
+			steps:[
+				{do:"as-modal", steps:[
+					{do:"view-html"}
+				]}
+			]
+		}
 
 		feed: {
 			roles: ["anonymous"]
