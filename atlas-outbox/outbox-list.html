@@ -19,6 +19,8 @@
 					</div>
 				{{- end -}}
 
+				<div class="h-summary text-black">{{$stream.ContentHTML | html }}</div>
+
 				{{- $place := .Places.First -}}
 				{{- if $place.HasAddress -}}
 					<div class="h-adr margin-top margin-bottom-lg text-sm text-gray italics">
@@ -35,7 +37,6 @@
 					</div>
 				{{- end -}}
 
-				<div class="h-summary text-black">{{$stream.ContentHTML | html }}</div>
 				<div class="text-sm text-light-gray p-published">{{$stream.PublishDate | humanizeTime}}</div>
 			</div>
 		</a>
