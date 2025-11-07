@@ -1,0 +1,23 @@
+<div class="margin-bottom-sm text-gray text-sm align-center">Share this search wtih your mobile phone.</div>
+
+<div class="margin-bottom">
+	<img id="qrcode" class="width-100%">
+</div>
+
+<button script="on click trigger closeModal">Close Window</button>
+
+<script>
+	(function() {
+		var imageUrl = "{{.Host}}/{{.StreamID}}/qrcode?{{.QueryString}}";
+
+		if (imageUrl.indexOf("latitude") == -1) {
+			imageUrl += "&latitude=" + localStorage.getItem("latitude");
+		}
+
+		if (imageUrl.indexOf("longitude") == -1) {
+			imageUrl += "&longitude=" + localStorage.getItem("longitude");
+		}
+
+		document.getElementById("qrcode").src = imageUrl;
+	})();
+</script>

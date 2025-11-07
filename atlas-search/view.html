@@ -7,7 +7,7 @@
 	<div id="map" class="pos-absolute-four-corners"></div>
 	<div class="pos-absolute-top-left text-sm" style="z-index:1000;">
 		<button class="primary">Follow This Map</button>
-		<button>{{icon "qr-code"}} Share</button>
+		<button hx-get="/{{.StreamID}}/view-qrcode?{{.QueryString}}">{{icon "qr-code"}} QR Code</button>
 	</div>
 
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -48,9 +48,12 @@
 		function setLocation() {
 			var zoom = map.getZoom()
 			var latLng = map.getCenter()
-			localStorage.setItem("latitude", latLng.lat);
-			localStorage.setItem("longitude", latLng.lng);
-			localStorage.setItem("zoom", zoom);
+
+			if ((latLng.lat != NaN) && (latLng.lng != NaN)) {
+				localStorage.setItem("latitude", latLng.lat);
+				localStorage.setItem("longitude", latLng.lng);
+				localStorage.setItem("zoom", zoom);
+			}
 
 			showResults()
 		}
@@ -71,13 +74,13 @@
 				west, north, // close the polygon
 			].join(",")
 
-			var data = await fetch("/{{.StreamID}}/view-results?q={{queryEscape $q}}&place=" + polygon)
+			var data = await fetch("/{{.StreamID}}/view-results?q={{queryEscape $q}}&location=" + polygon)
 			var items = await data.json()
 
 			markerGroup.clearLayers();
 
 			for (item of items) {
-				var coordinates = item.place.location.coordinates
+				var coordinates = item.location.coordinates
 				latLng = L.latLng(coordinates[1], coordinates[0])
 
 				var marker = L.marker(latLng).addTo(markerGroup);
@@ -98,21 +101,22 @@
 
 			if (queryString != "") {
 				var queryParams = new URLSearchParams(queryString);
-
 				var latitudeString = queryParams.get("latitude")
 				var longitudeString = queryParams.get("longitude")
 
-				var latitude = parseFloat(latitudeString)
-				var longitude = parseFloat(longitudeString)
-				
-				if ((latitude != NaN) && (longitude != NaN)) {
-					localStorage.setItem("latitude", latitude)
-					localStorage.setItem("longitude", longitude)
+				if ((latitudeString != null) && (longitudeString != null)) {
+					var latitude = parseFloat(latitudeString)
+					var longitude = parseFloat(longitudeString)
 					
-					return {
-						latitude: latitude,
-						longitude: longitude,
-						zoom: getStoredZoom()
+					if ((latitude != NaN) && (longitude != NaN)) {
+						localStorage.setItem("latitude", latitude)
+						localStorage.setItem("longitude", longitude)
+						
+						return {
+							latitude: latitude,
+							longitude: longitude,
+							zoom: getStoredZoom()
+						}
 					}
 				}
 			}
@@ -120,21 +124,32 @@
 			// 2. Look for lat/lng in the localStorage
 			var storedLatitude = localStorage.getItem("latitude");
 			var storedLongitude = localStorage.getItem("longitude");
-			var storedZoom = getStoredZoom()
+
+			console.log(storedLatitude)
+			console.log(storedLongitude)
 
 			// If the user already has a saved location, then use that
 			if ((storedLatitude != null) && (storedLongitude != null)) {
-				return {
-					latitude: parseFloat(storedLatitude),
-					longitude: parseFloat(storedLongitude),
-					zoom: parseInt(storedZoom)
-				};
+				var latitude = parseFloat(storedLatitude)
+				var longitude = parseFloat(storedLongitude)
+
+				console.log(latitude)
+				console.log(latitude == NaN)
+				console.log(longitude)
+				if ((latitude != NaN) && (longitude != NaN)) {
+					return {
+						latitude: latitude,
+						longitude: longitude,
+						zoom: getStoredZoom()
+					};
+				}
 			}
 
 			// 3. Look for the user's APPROXIMATE location based on their IP address
 			var response = await fetch("/.geocode/ip");
 			var result = await response.json();
 			result.zoom = getStoredZoom();
+			console.log(result)
 
 			return result;
 		}
