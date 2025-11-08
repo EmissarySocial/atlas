@@ -3,11 +3,24 @@
 {{- $lng := .QueryParam "lng" -}}
 {{- $zoom := .QueryParam "zoom" -}}
 
+<style>
+	#controls {
+		z-index:1000; 
+		background-color:color-mix(in srgb, var(--black), transparent 60%);
+	}
+</style>
+
 <div class="app" script="init send SelectNav(id:'{{.StreamID}}')">
 	<div id="map" class="pos-absolute-four-corners"></div>
-	<div class="pos-absolute-top-left text-sm" style="z-index:1000;">
-		<button class="primary">Follow This Map</button>
-		<button hx-get="/{{.StreamID}}/view-qrcode?{{.QueryString}}">{{icon "qr-code"}} QR Code</button>
+	<div id="controls" class="pos-absolute-bottom-left text-sm padding-xs rounded">
+		<div>
+			<button id="follow-button" class="primary">Follow this Map</button>
+			<button id="qrcode-button">{{icon "qr-code"}} QR Code</button>
+		</div>
+
+		<div class="margin-top-sm text-xs" style="color:var(--white);">
+			<span hx-get="/{{.StreamID}}/intent" class="clickable intentMarker-account">&nbsp;</span>
+		</div>
 	</div>
 
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -27,9 +40,7 @@
 
 		async function showMap() {
 
-			var loc = await getSavedLocation();
-
-			map.setView([loc.latitude, loc.longitude], loc.zoom);
+			await getLocation();
 			map.attributionControl.setPrefix("")
 			map.zoomControl.setPosition("topright");
 
@@ -67,16 +78,37 @@
 			var south = bounds._southWest.lat
 			var west = bounds._southWest.lng
 			var polygon = [
-				west, north,
 				east, north,
 				east, south,
 				west, south,
-				west, north, // close the polygon
+				west, north,
+				east, north,
 			].join(",")
 
+			console.log(bounds)
+			console.log(polygon)
+
+			// Update the browser's location
+			var queryParams = new URLSearchParams(window.location.search);
+			queryParams.delete("location")
+			queryParams.set("location", polygon)
+			
+			var queryString = queryParams.toString()
+
+			// Push the location into the browser's URL bar
+			history.replaceState(null, null, "?" + queryString)
+
+			// Update controls with new QueryString 
+			document.getElementById("follow-button").setAttribute("hx-post", "/.searchQuery?types=Event&forward=/{{.StreamID}}/intent%3Fintent%3Dfollow%26object=&" + queryString)
+			document.getElementById("qrcode-button").setAttribute("hx-get", "/{{.StreamID}}/view-qrcode?" + queryString)
+
+			if (typeof htmx != "undefined") {
+				htmx.process("#controls")
+			}
+
+			// Rewrite markers on the map
 			var data = await fetch("/{{.StreamID}}/view-results?q={{queryEscape $q}}&location=" + polygon)
 			var items = await data.json()
-
 			markerGroup.clearLayers();
 
 			for (item of items) {
@@ -85,38 +117,35 @@
 
 				var marker = L.marker(latLng).addTo(markerGroup);
 
-				if (item.iconUrl != "") {
+				if ((item.iconUrl != null) && (item.iconUrl != "")) {
 					item.summary = "<img src='" + item.iconUrl +"' class='width-100% block margin-bottom'>" + item.summary
 				}
 
 				item.summary = "<a href='" + item.url + "' class='block text-plain text-nocolor width-320'>" + item.summary + "<br><br><div class=link>View &rarr;</div></a>"
 				marker.bindPopup(item.summary);
 			}
+
 		}
 
-		async function getSavedLocation() {
+		async function getLocation() {
 
 			// 1. Look for lat/lng set in the URL querystring
 			var queryString = window.location.search;
 
 			if (queryString != "") {
 				var queryParams = new URLSearchParams(queryString);
-				var latitudeString = queryParams.get("latitude")
-				var longitudeString = queryParams.get("longitude")
-
-				if ((latitudeString != null) && (longitudeString != null)) {
-					var latitude = parseFloat(latitudeString)
-					var longitude = parseFloat(longitudeString)
-					
-					if ((latitude != NaN) && (longitude != NaN)) {
-						localStorage.setItem("latitude", latitude)
-						localStorage.setItem("longitude", longitude)
-						
-						return {
-							latitude: latitude,
-							longitude: longitude,
-							zoom: getStoredZoom()
-						}
+				var location = queryParams.get("location")
+				console.log(location)
+				if (location != null) {
+					var points = location.split(",")
+					console.log(points)
+					if (points.length == 10) {
+						var northEast = L.latLng(points[1], points[0]);
+						var southWest = L.latLng(points[5], points[4]);
+						var bounds = L.latLngBounds(northEast, southWest);
+						console.log(bounds)
+						map.fitBounds(bounds)
+						return
 					}
 				}
 			}
@@ -124,9 +153,6 @@
 			// 2. Look for lat/lng in the localStorage
 			var storedLatitude = localStorage.getItem("latitude");
 			var storedLongitude = localStorage.getItem("longitude");
-
-			console.log(storedLatitude)
-			console.log(storedLongitude)
 
 			// If the user already has a saved location, then use that
 			if ((storedLatitude != null) && (storedLongitude != null)) {
@@ -137,24 +163,18 @@
 				console.log(latitude == NaN)
 				console.log(longitude)
 				if ((latitude != NaN) && (longitude != NaN)) {
-					return {
-						latitude: latitude,
-						longitude: longitude,
-						zoom: getStoredZoom()
-					};
+					map.setView([latitude, longitude], getZoom());
+					return
 				}
 			}
 
 			// 3. Look for the user's APPROXIMATE location based on their IP address
 			var response = await fetch("/.geocode/ip");
 			var result = await response.json();
-			result.zoom = getStoredZoom();
-			console.log(result)
-
-			return result;
+			map.setView([result.latitude, result.longitude], getZoom());
 		}
 
-		function getStoredZoom() {
+		function getZoom() {
 			result = parseInt(localStorage.getItem("zoom"))
 
 			if ((result != NaN) && (result >= 0) & (result <= 19)) {
@@ -162,6 +182,14 @@
 			}
 
 			return 13
+		}
+
+		function parseJSON(value) {
+			try{
+				return JSON.parse(value)
+			} catch (err) {
+				return null
+			}
 		}
 
 	</script>
