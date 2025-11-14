@@ -43,16 +43,13 @@
 				date: {type:"string", format:"date"}
 				time: {type:"string", format:"time"}
 			}}
-			places: {
-				type:"array", 
-				items: {
-					type:"object"
-					properties: {
-						"name": {type:"string"}
-						"fullAddress": {type:"string"}
-						"latitude": {type:"number"}
-						"longitude": {type:"number"}
-					}
+			location: {
+				type:"object"
+				properties: {
+					"name": {type:"string"}
+					"formatted": {type:"string"}
+					"latitude": {type:"number"}
+					"longitude": {type:"number"}
 				}
 			}
 			data: {
@@ -102,7 +99,7 @@
 						form: {
 							type: layout-vertical
 							children: [
-								{type:"place", id:"placeSelect", path:"places.0", options:{placeholder:"Location...", endpoint:"/.geosearch/options", required:true}}
+								{type:"place", path:"location", options:{placeholder:"Location...", endpoint:"/.geocode/autocomplete", required:true}}
 								{type:"textarea", path:"content.raw", options:{placeholder:"Your Message...", rows:6}}
 								{type:"upload", path:"iconUrl", label:"Attach Photo", options:{accept:"image/*"}}
 								{type:"select", path:"data.deleteAfter", options:{provider:"atlas-post.deleteAfter"}}
@@ -200,7 +197,7 @@
 						form: {
 							type: layout-vertical
 							children: [
-								{type:"place", id:"placeSelect", path:"places.0", options:{placeholder:"Location...", endpoint:"/.geosearch/options", required:true}}
+								{type:"place", path:"location", options:{placeholder:"Location...", endpoint:"/.geocode/autocomplete", required:true}}
 								{type:"textarea", path:"content.raw", options:{placeholder:"Your Message...", rows:6}}
 								{type:"upload", path:"iconUrl", label:"Attach a Photo", options:{accept:"image/*", delete:"/{{.StreamID}}/delete-attachment"}}
 								{type:"select", path:"data.deleteAfter", options:{provider:"atlas-post.deleteAfter"}}

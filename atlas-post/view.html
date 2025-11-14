@@ -60,24 +60,28 @@
 				{{- end -}}
 			{{- end -}}
 		
-			{{- $place := .Places.First -}}
-			{{- if $place.HasAddress -}}
+			{{- $location := .Location -}}
+			{{- if $location.HasGeocode -}}
 				<div class="md:flex-row margin-vertical-lg" script="install blockselect(link:#maplink)">
 					<div class="md:width-20%">
-						{{ template "view-map" $place }}
+						{{ template "view-map" $location }}
 					</div>
 					<div class="h-adr md:width-80% text-sm text-gray">
-						<div class="p-street-address">{{$place.Street1}}</div>
-						<div class="p-extended-address">{{$place.Street2}}</div>
-						<div>
-							<span class="p-locality">{{$place.Locality}}</span>
-							<span class="p-region">{{$place.Region}}</span>
-							<span class="p-postal-code">{{$place.PostalCode}}</span>
-						</div>
-						<div class="p-country-name">{{$place.Country}}</div>
-						<data class="p-latitude" value="{{$place.Latitude}}"></data>
-						<data class="p-longitude" value="{{$place.Longitude}}"></data>
-						<a id="maplink" href="/home?latitude={{$place.Latitude}}&longitude={{$place.Longitude}}">Nearby Placemarks &rarr;</a>
+						{{- if $location.HasAddress -}}
+							<div class="p-street-address">{{$location.Street1}}</div>
+							<div class="p-extended-address">{{$location.Street2}}</div>
+							<div>
+								<span class="p-locality">{{$location.Locality}}</span>
+								<span class="p-region">{{$location.Region}}</span>
+								<span class="p-postal-code">{{$location.PostalCode}}</span>
+							</div>
+							<div class="p-country-name">{{$location.Country}}</div>
+						{{- else -}}
+							<div>{{$location.Formatted}}</div>
+						{{- end -}}
+						<data class="p-latitude" value="{{$location.Latitude}}"></data>
+						<data class="p-longitude" value="{{$location.Longitude}}"></data>
+						<a id="maplink" href="/home?latitude={{$location.Latitude}}&longitude={{$location.Longitude}}">Nearby Placemarks &rarr;</a>
 					</div>
 				</div>
 			{{- end -}}

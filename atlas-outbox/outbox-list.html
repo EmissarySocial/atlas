@@ -21,19 +21,19 @@
 
 				<div class="h-summary text-black">{{$stream.ContentHTML | html }}</div>
 
-				{{- $place := .Places.First -}}
-				{{- if $place.HasAddress -}}
+				{{- $location := .Location -}}
+				{{- if $location.HasAddress -}}
 					<div class="h-adr margin-top margin-bottom-lg text-sm text-gray italics">
-						<div class="p-street-address">{{$place.Street1}}</div>
-						<div class="p-extended-address">{{$place.Street2}}</div>
+						<div class="p-street-address">{{$location.Street1}}</div>
+						<div class="p-extended-address">{{$location.Street2}}</div>
 						<div>
-							<span class="p-locality">{{$place.Locality}}</span>
-							<span class="p-region">{{$place.Region}}</span>
-							<span class="p-postal-code">{{$place.PostalCode}}</span>
+							<span class="p-locality">{{$location.Locality}}</span>
+							<span class="p-region">{{$location.Region}}</span>
+							<span class="p-postal-code">{{$location.PostalCode}}</span>
 						</div>
-						<div class="p-country-name">{{$place.Country}}</div>
-						<data class="p-latitude" value="{{$place.Latitude}}"></data>
-						<data class="p-longitude" value="{{$place.Longitude}}"></data>
+						<div class="p-country-name">{{$location.Country}}</div>
+						<data class="p-latitude" value="{{$location.Latitude}}"></data>
+						<data class="p-longitude" value="{{$location.Longitude}}"></data>
 					</div>
 				{{- end -}}
 
