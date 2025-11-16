@@ -39,10 +39,7 @@
 				}
 			}
 			imageUrl: {type:"string", format:"url"}
-			startDate: {type:"object", properties: {
-				date: {type:"string", format:"date"}
-				time: {type:"string", format:"time"}
-			}}
+			startDate: {type:"string"}
 			location: {
 				type:"object"
 				properties: {
@@ -100,8 +97,9 @@
 							type: layout-vertical
 							children: [
 								{type:"place", path:"location", options:{placeholder:"Location...", endpoint:"/.geocode/autocomplete", required:true}}
-								{type:"textarea", path:"content.raw", options:{placeholder:"Your Message...", rows:6}}
-								{type:"upload", path:"iconUrl", label:"Attach Photo", options:{accept:"image/*"}}
+								{type:"textarea", path:"content.raw", options:{placeholder:"Your Message...", rows:8}}
+								{type:"datetime", path:"startDate", options:{default:"now"}}
+								{type:"upload", path:"iconUrl", options:{accept:"image/*"}}
 								{type:"select", path:"data.deleteAfter", options:{provider:"atlas-post.deleteAfter"}}
 								{type:"hidden", path:"circles", options:{value:"000000000000000000000000"}}
 								// {type:"select", path:"", options:{provider:"circles"}}
@@ -199,6 +197,7 @@
 							children: [
 								{type:"place", path:"location", options:{placeholder:"Location...", endpoint:"/.geocode/autocomplete", required:true}}
 								{type:"textarea", path:"content.raw", options:{placeholder:"Your Message...", rows:6}}
+								{type:"datetime", path:"startDate", options:{default:"now"}}
 								{type:"upload", path:"iconUrl", label:"Attach a Photo", options:{accept:"image/*", delete:"/{{.StreamID}}/delete-attachment"}}
 								{type:"select", path:"data.deleteAfter", options:{provider:"atlas-post.deleteAfter"}}
 								{type:"hidden", path:"circles", options:{value:"000000000000000000000000"}}
