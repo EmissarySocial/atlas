@@ -1,4 +1,3 @@
-
 <style>
 	#map {
 		width:100%;
@@ -64,7 +63,7 @@
 			{{- if $location.HasGeocode -}}
 				<div class="md:flex-row margin-vertical-lg" script="install blockselect(link:#maplink)">
 					<div class="md:width-20%">
-						{{ template "view-map" $location }}
+						{{ template "view-map" . }}
 					</div>
 					<div class="h-adr md:width-80% text-sm text-gray">
 						{{- if $location.HasAddress -}}
@@ -107,6 +106,7 @@
 						<a href="{{.AttributedTo.ProfileURL}}">{{.AttributedTo.Name}}</a>
 					</div>
 					<div class="text-gray">{{.PublishDate | tinyDate}}</div>
+					<div class="text-gray">{{.StartDate }}</div>
 				</div>
 			</div>
 			<div>
