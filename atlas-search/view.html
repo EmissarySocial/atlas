@@ -6,14 +6,23 @@
 
 <style>
 	#controls {
+		position: absolute;
 		z-index:1000; 
 		background-color:color-mix(in srgb, var(--black), transparent 60%);
+
+		bottom: var(--rhythm);
+		left: var(--rhythm);
+
+		.mobile & {
+			top: var(--rhythm);
+			bottom: unset;
+		}
 	}
 </style>
 
 <div class="app" script="init send SelectNav(id:'{{.StreamID}}')">
 	<div id="map" class="pos-absolute-four-corners"></div>
-	<div id="controls" class="pos-absolute-bottom-left text-sm padding-xs rounded">
+	<div id="controls" class="text-sm padding-xs rounded">
 		<div>
 			<button id="follow-button" class="primary">Follow this Map</button>
 			<button id="qrcode-button">{{icon "qr-code"}} QR Code</button>
