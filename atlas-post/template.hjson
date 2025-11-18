@@ -71,9 +71,6 @@
 	}
 
 	socialRole: Note
-	socialRules: [
-		{target:"type", value:["Note"]}
-	]
 
 	search: {
 		type: "Event"
