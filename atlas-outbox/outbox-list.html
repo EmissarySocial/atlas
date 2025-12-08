@@ -6,7 +6,6 @@
 	{{- $isMyself := .IsMyself -}}
 
 	{{- range $index, $stream := $outbox -}}
-		{{- $document := $outboxBuilder.ActivityStream $stream.URL -}}
 		<hr>
 		<a href="/{{$stream.ID}}" class="block text-plain text-nocolor hover-trigger padding margin-bottom h-entry turboclick">
 			<div class="margin-horizontal-auto" style="max-width:600px;">
