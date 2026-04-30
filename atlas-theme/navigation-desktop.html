@@ -30,16 +30,22 @@ style="width:240px; padding:var(--rhythm);">
 
 		<br>
 
+		<a href="/@me/newsfeed" id="nav-inbox" class="nav-item turboclick" aria-label="Inbox">
+			<span class="icon selected-hide">{{icon "inbox"}}</span>
+			<span class="icon selected-show">{{icon "inbox-fill"}}</span>
+			<span class="label">My Inbox</span>
+		</a>
+
+		<a href="/@me/conversations" id="nav-conversations" class="nav-item turboclick" aria-label="Conversations">
+			<span class="icon selected-hide">{{- icon "chat" }}</span>
+			<span class="icon selected-show">{{- icon "chat-fill" }}</span>
+			<span class="label">Conversations</span>
+		</a>
+
 		<a href="/@me" id="nav-outbox" class="nav-item turboclick" aria-label="Profile">
 			<span class="icon selected-hide">{{icon "user"}}</span>
 			<span class="icon selected-show">{{icon "user-fill"}}</span>
 			<span class="label">My Profile</span>
-		</a>
-
-		<a href="/@me/inbox" id="nav-inbox" class="nav-item turboclick" aria-label="Inbox">
-			<span class="icon selected-hide">{{icon "inbox"}}</span>
-			<span class="icon selected-show">{{icon "inbox-fill"}}</span>
-			<span class="label">My Inbox</span>
 		</a>
 
 		<a href="/@me/settings" id="nav-settings" class="nav-item turboclick" aria-label="Settings">
