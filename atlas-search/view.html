@@ -89,9 +89,6 @@
 				east, north,
 			].join(",")
 
-			console.log(bounds)
-			console.log(polygon)
-
 			// Update the browser's location
 			var queryParams = new URLSearchParams(window.location.search);
 			queryParams.delete("location")
@@ -139,15 +136,12 @@
 			if (queryString != "") {
 				var queryParams = new URLSearchParams(queryString);
 				var location = queryParams.get("location")
-				console.log(location)
 				if (location != null) {
 					var points = location.split(",")
-					console.log(points)
 					if (points.length == 10) {
 						var northEast = L.latLng(points[1], points[0]);
 						var southWest = L.latLng(points[5], points[4]);
 						var bounds = L.latLngBounds(northEast, southWest);
-						console.log(bounds)
 						map.fitBounds(bounds)
 						return
 					}
@@ -163,9 +157,6 @@
 				var latitude = parseFloat(storedLatitude)
 				var longitude = parseFloat(storedLongitude)
 
-				console.log(latitude)
-				console.log(latitude == NaN)
-				console.log(longitude)
 				if ((latitude != NaN) && (longitude != NaN)) {
 					map.setView([latitude, longitude], getZoom());
 					return
