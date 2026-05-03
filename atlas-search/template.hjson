@@ -1,11 +1,13 @@
 {
 	templateId: atlas-search
+	category: Custom
 	templateRole: search
 	extends: ["base-intent"]
 	containedBy: ["top"]
 	model: Stream
-	label: Search/Home page for Atlas
-	description: Search Page for Atlas Content
+	label: Atlas: Map
+	description: Map + Search filters
+	icon: map
 	schema: {
 		type:object
 		properties: {

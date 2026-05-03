@@ -1,5 +1,6 @@
 {
 	templateId: atlas-outbox
+	category: Special
 	templateRole: user-outbox
 	model: Outbox
 	label: Atlas Outbox

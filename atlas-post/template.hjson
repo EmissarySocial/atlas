@@ -1,5 +1,6 @@
 {
 	templateId: atlas-post
+	category: Calendar
 	templateRole: event
 	model: Stream
 	containedBy: ["outbox"]
