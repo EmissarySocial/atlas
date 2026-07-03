@@ -34,12 +34,11 @@
 			content: {
 				type: object,
 				properties: {
-					type: {type:"string"}
+					format: {type:"string"}
 					raw: {type:"string"}
 					html: {type:"string", format:"html"}
 				}
 			}
-			imageUrl: {type:"string", format:"url"}
 			startDate: {type:"string"}
 			location: {
 				type:"object"
