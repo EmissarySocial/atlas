@@ -26,7 +26,7 @@
 					<span class="text-gray">{{$publishedDate | tinyDate}}</span>
 				</div>
 				<div>{{$object.GetString "name"}}</div>
-				<div>{{$object.GetString "content" | html}}</div>
+				<div>{{$object.GetString "content" | htmlMinimal}}</div>
 			</div>
 			<div>
 				<a href="{{$url}}" target="_blank" class="button text-sm">{{icon "globe"}}</a>
