@@ -79,6 +79,7 @@
 	}
 
 	tagPaths: ["content.html"]
+	tagUrl: "/home?q="
 
 	actions: {
 		create: {
@@ -106,7 +107,7 @@
 				]}
 
 				{do:"upload-attachments", category:"image", fieldname:"iconUrl", download-path:"iconUrl", rules:{types:["webp"]}}
-				{do:"process-content", format:"MARKDOWN", add-tags:true, tag-path:"/home?q="}
+				{do:"process-content", format:"MARKDOWN"}
 				{do:"set-circle-sharing", role:"viewer", method:"post"}
 				{do:"save-and-publish", outbox:"true"}
 				{do:"search-index"}
@@ -204,7 +205,7 @@
 				]}
 
 				{do:"upload-attachments", category:"image", fieldname:"iconUrl", download-path:"iconUrl", rules:{types:["webp"]}}
-				{do:"process-content", format:"MARKDOWN", add-tags:true, tag-path:"/home?q="}
+				{do:"process-content", format:"MARKDOWN"}
 				{do:"set-circle-sharing", role:"viewer", method:"post"}
 				{do:"save-and-publish", outbox:"true"}
 				{do:"search-index"}
