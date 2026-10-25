@@ -81,7 +81,7 @@ main:has(.app) {
 
 		& .selected {
 			font-weight:bold;
-			color: var(--black);
+			color: var(--gray100);
 		}
 
 		& button {

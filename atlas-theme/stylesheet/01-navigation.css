@@ -9,12 +9,12 @@ nav {
 	overflow-y:hidden;
 	overscroll-behavior: none;
 
-	background-color:var(--white);
+	background-color:var(--gray00);
 	border: solid 1px rgba(127,127,127,0.5);
 	border-radius: calc(var(--rhythm) * 2.5);
 	box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 	padding:var(--rhythm);
-	color: var(--black);
+	color: var(--gray100);
 
 	#nav-search {
 		border-radius:calc(var(--rhythm) * 2);
