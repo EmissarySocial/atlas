@@ -12,7 +12,7 @@ A theme's `resources/` folder is different — it is served as plain static file
 
 ## `extends` composes templates, and the base templates live in Emissary
 
-A template inherits actions, states, roles, schema, and datasets from each entry in its `extends` array, and a value defined locally wins over an inherited one. Every base named here — `user-outbox` for the outbox, `base-intent` and `base-social` for posts and search — ships inside Emissary's `_embed/templates`, **not** in this repo, so an unexplained action or role comes from there. Unlike the sibling Bandwagon and Qwertylicious packages, Atlas has no local `-common` template; there is no shared dataset holder to extend.
+A template inherits actions, states, roles, schema, and datasets from each entry in its `extends` array, and a value defined locally wins over an inherited one. Every base named here — `user-outbox` and `base-outbox` for the outbox, `base-intent` and `base-social` for posts and search — ships inside Emissary's `_embed/templates`, **not** in this repo, so an unexplained action or role comes from there. Unlike the sibling Bandwagon and Qwertylicious packages, Atlas has no local `-common` template; there is no shared dataset holder to extend.
 
 ## Option providers are `{templateId}.{datasetName}`
 
@@ -53,3 +53,7 @@ Go's `html/template` resolves function names at **parse** time, so calling a hel
 The `atlas-search` template draws markers from `.Search.Top120.ByCreateDate.Reverse.Slice`, which compiles to `find({location: {$geoWithin: …}}).sort({createDate: -1}).limit(120)`. MongoDB sorts the whole match set and *then* truncates, so once more than 120 results fall inside a viewport the oldest pins silently vanish. It looks exactly like a date cutoff and is not; the diagnostic is that zooming in brings the old pins back.
 
 There is no hidden date filter anywhere — `Common.Search()` builds criteria from `tags`, `date`, and `location` only, and `atlas-search/view.html` never sends `date`, so that filter is inert. For a map or viewport template prefer `.All` (unbounded, but then you need marker clustering) or a larger preset; `ByShuffle` at least truncates without an age bias. Presets live in Emissary's `build/searchBuilder.go` and stop at `Top600`.
+
+## `atlas-outbox` lists `base-outbox` for the Profile settings tabs
+
+Emissary's settings page loads its Profile tabs from the user's outbox, through `base-outbox`. `atlas-outbox` also gets it through `user-outbox`, and lists it directly so a reader sees it. Never ship that line to a server whose Emissary predates `base-outbox`, because an unknown `extends` halts first boot.

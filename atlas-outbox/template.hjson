@@ -6,7 +6,7 @@
 	label: Atlas Outbox
 	description: Create Atlas posts
 	icon: inbox
-	extends: ["user-outbox"]
+	extends: ["user-outbox", "base-outbox"]
 	schema: {
 		title: Atlax Profile
 		type: object
