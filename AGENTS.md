@@ -24,6 +24,8 @@ A form field like `options:{provider:"atlas-post.deleteAfter"}` is split on the 
 
 hjson is deliberately lenient, so a typo in a key name is not a parse error; the field simply arrives under the wrong name and whatever read it gets a zero value. A stray quote such as `{Label":"Light Green", Value:"#aad816"}` parses cleanly into a key literally named `Label"`, leaving that entry with no `Label` at all and a blank row in the rendered list — the sibling Qwertylicious package carries exactly that bug today. Nothing warns you. After editing a `template.hjson`, confirm the change actually took effect in the rendered page rather than trusting that it parsed.
 
+A key given twice is the same kind of silence: hjson keeps the last one. `atlas-search` carried two top-level `schema:` blocks until 2026-11-06, and only the second was live; the first declared `icon` as a plain string, which would have replaced Emissary's token-format `icon` had it ever applied, so the merge kept the live block's shape. Emissary's `TestFormPosts` golden for atlas is what showed the difference.
+
 ## The server caches template folders — restart before concluding an edit did nothing
 
 Emissary loads Git and filesystem template packages into memory at startup. An edit to a `template.hjson` or an `.html` view will not appear until the server reloads that package, so a change that seems to have no effect is usually a stale copy rather than a broken template.

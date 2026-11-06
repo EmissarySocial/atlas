@@ -11,7 +11,6 @@
 	schema: {
 		type:object
 		properties: {
-			icon: {type:"string"}
 			label: {type:"string"}
 			summary: {type:"string"}
 			data: {
