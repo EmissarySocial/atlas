@@ -19,6 +19,7 @@
 				properties: {
 					searchText: {type:"string"}
 					content: {type:"string"}
+					tags: {type:"string"}
 				}
 			}
 		}    
@@ -32,21 +33,6 @@
 	roles: {}
 
 	bundles: {}
-
-	schema: {
-		type:object
-		properties: {
-			label: {type:"string"}
-			summary: {type:"string"}
-			data: {
-				type:object
-				properties: {
-					searchText: {type:"string"}
-					content: {type:"string"}
-				}
-			}
-		}    
-	}
 
 	tagPaths: ["data.tags"]
 
