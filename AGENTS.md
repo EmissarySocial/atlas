@@ -59,3 +59,12 @@ There is no hidden date filter anywhere — `Common.Search()` builds criteria fr
 ## `atlas-outbox` lists `base-outbox` for the Profile settings tabs
 
 Emissary's settings page loads its Profile tabs from the user's outbox, through `base-outbox`. `atlas-outbox` also gets it through `user-outbox`, and lists it directly so a reader sees it. Never ship that line to a server whose Emissary predates `base-outbox`, because an unknown `extends` halts first boot.
+
+## The theme's startup tasks depend on Emissary's own actions
+
+[theme.hjson](atlas-theme/theme.hjson) lists `startupTasks`, the rows of the first-run checklist at `/startup`. Each row is checked off in one of two ways, and neither is checked when this package loads:
+
+- **Its `value` is recorded by a `startup-save-task` step** in some action, usually one of Emissary's admin templates. A value that no step records leaves a row that can never be checked.
+- **Its `value` is a connection provider ID**, such as `GEOCODE-TILES`, and the row is checked while that connection is active. Link such a row to `/admin/connections/edit?providerId=...`.
+
+`startupDefaultPages` names the start pages that "Add Default Content" sets after it creates `startupStreams`. Each must be a path on the website, and the anonymous one must be a page that `startupStreams` creates. Emissary's `tests/startup_test.go` checks all of this for every sibling package, so run `go test ./tests` in Emissary after editing these lists.

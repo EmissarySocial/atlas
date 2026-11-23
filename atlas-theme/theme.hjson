@@ -1,13 +1,13 @@
 {
-	themeId: "atlas-theme"
+	themeId: atlas-theme
 	extends:["global"]
 	isVisible:true
-	category:"General"
-	label: "Atlas Mobile"
-	description: "A mobile-first theme for the Atlas app."
+	category: General
+	label: Atlas Maps
+	description: Atlas is a unique mapping server for the Fediverse, made for local reporting and map-based guides. Authenticated users can post photos and notes directly on a map.  Then website visitors can search and subscribe to specific map regions, and get Fediverse updates for every new posts.
 	rank: 0
 	schema: {
-		type: "object", 
+		type: object
 		properties: {
 			iconId: {type:"string", format:"objectId"}
 			iconUrl: {type:"string", format:"url"}
@@ -28,8 +28,25 @@
 	}
 	bundles: {
 		stylesheet: {
-			content-type:"text/css"
+			content-type: text/css
 		}
+	}
+	startupTasks: [
+		{label:"Website Name and Logo", description:"Set some basic info about this domain.", href:"/admin/domain/index", value:"/admin/domain"}
+		{label:"Map Tiles", description:"Draws the map on your home page. Atlas cannot work without it.", href:"/admin/connections/edit?providerId=GEOCODE-TILES", value:"GEOCODE-TILES"}
+		{label:"Address Search", description:"Suggests places as people type a location for their post.", href:"/admin/connections/edit?providerId=GEOCODE-AUTOCOMPLETE", value:"GEOCODE-AUTOCOMPLETE"}
+		{label:"Address Geocoder", description:"Finds the map coordinates of a street address.", href:"/admin/connections/edit?providerId=GEOCODE-ADDRESS", value:"GEOCODE-ADDRESS"}
+		{label:"Visitor Location (Optional)", description:"Centers the map near each visitor, using their network address.", href:"/admin/connections/edit?providerId=GEOCODE-NETWORK", value:"GEOCODE-NETWORK"}
+		{label:"Timezone Lookup (Optional)", description:"Finds the local timezone of each place.", href:"/admin/connections/edit?providerId=GEOCODE-TIMEZONE", value:"GEOCODE-TIMEZONE"}
+		{label:"Add Default Content", description:"Creates the Map and About pages, and sets your start pages.", href:"/startup/content", value:"/startup/content"}
+		{label:"Registration Form", description:"Let people sign up, so they can post to the map.", href:"/admin/domain/signup", value:"/admin/domain/signup"}
+		{label:"Configure Groups (Optional)", description:"Set up user groups to manage access and permissions.", href:"/startup/groups", value:"/admin/groups"}
+		{label:"Start Pages (Optional)", description:"Choose where visitors, members, and owners land.", href:"/admin/domain/defaults", value:"/admin/domain/defaults"}
+	]
+	startupDefaultPages: {
+		anonymous: /home
+		authenticated: /home
+		owner: /home
 	}
 	startupStreams: [
 		{templateId:"atlas-search", token:"home", label:"Map", icon:"map", stateId:"published", publishDate:0, rank:1}
